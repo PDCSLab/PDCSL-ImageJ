@@ -1,3 +1,4 @@
+ # -*- coding: utf-8 -*
 # GFPMasker - Mask GFP-positive regions from a RFP channel
 # Copyright © 2019 Damien Goutte-Gattat
 
