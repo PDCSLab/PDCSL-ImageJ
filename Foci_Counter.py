@@ -35,19 +35,28 @@ def run_script():
 	# Save any existing ROI
 	roi = img.getRoi()
 
+	# Save existing thresholds
+	mint = img.getProcessor().getMinThreshold()
+	maxt = img.getProcessor().getMaxThreshold()
+
 	# Max project the image and split the channels
 	channels = ChannelSplitter.split(ZProjector.run(img, 'max'))
 	channel = channels[ch]
 
-	# Apply arbitrary threshold to get the foci
-	depth = channel.getBitDepth()
-	if depth == 16:
-		channel.getProcessor().setThreshold(4000, 65535, ImageProcessor.NO_LUT_UPDATE)
-	elif depth == 8:
-		channel.getProcessor().setThreshold(100, 255, ImageProcessor.NO_LUT_UPDATE)
+	if mint > 0 and maxt > 0:
+		# Reapply original threshold
+		channel.getProcessor().setThreshold(mint, maxt, ImageProcessor.NO_LUT_UPDATE)
 	else:
-		IJ.log("Unexpected bit depth ({}-bit), aborting".format(depth))
-		return
+		# Or apply arbitrary threshold
+		depth = channel.getBitDepth()
+		if depth == 16:
+			channel.getProcessor().setThreshold(4000, 65535, ImageProcessor.NO_LUT_UPDATE)
+		elif depth == 8:
+			channel.getProcessor().setThreshold(100, 255, ImageProcessor.NO_LUT_UPDATE)
+		else:
+			IJ.log("Unexpected bit depth ({}-bit), aborting".format(depth))
+			return
+
 
 	# If a ROI was active on the original image, apply it to the projection
 	if roi:
