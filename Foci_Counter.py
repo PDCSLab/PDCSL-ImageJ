@@ -1,7 +1,7 @@
 # Foci_Counter - Count H2A.X foci
 # Copyright © 2019 Damien Goutte-Gattat
 
-from ij import IJ
+from ij import IJ, ImagePlus
 from ij.measure import ResultsTable
 from ij.plugin import ChannelSplitter, ZProjector
 from ij.plugin.filter import ParticleAnalyzer
@@ -34,6 +34,8 @@ def run_script():
 
 	# Save any existing ROI
 	roi = img.getRoi()
+	if roi:
+		mask = img.getMask()
 
 	# Save existing thresholds
 	mint = img.getProcessor().getMinThreshold()
@@ -64,6 +66,7 @@ def run_script():
 	# If a ROI was active on the original image, apply it to the projection
 	if roi:
 		channel.setRoi(roi)
+		channel.getProcessor().setMask(mask)
 
 	channel.show()
 
