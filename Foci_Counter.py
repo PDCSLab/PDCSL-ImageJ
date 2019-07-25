@@ -39,8 +39,11 @@ def run_script():
 	mint = img.getProcessor().getMinThreshold()
 	maxt = img.getProcessor().getMaxThreshold()
 
-	# Max project the image and split the channels
-	channels = ChannelSplitter.split(ZProjector.run(img, 'max'))
+	# Max project the image if needed and split the channels
+	if img.getNSlices() > 1:
+		channels = ChannelSplitter.split(ZProjector.run(img, 'max'))
+	else:
+		channels = ChannelSplitter.split(img)
 	channel = channels[ch]
 
 	if mint > 0 and maxt > 0:
