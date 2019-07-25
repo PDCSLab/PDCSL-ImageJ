@@ -52,7 +52,7 @@ def run_script():
 		if depth == 16:
 			channel.getProcessor().setThreshold(4000, 65535, ImageProcessor.NO_LUT_UPDATE)
 		elif depth == 8:
-			channel.getProcessor().setThreshold(100, 255, ImageProcessor.NO_LUT_UPDATE)
+			channel.getProcessor().setThreshold(250, 255, ImageProcessor.NO_LUT_UPDATE)
 		else:
 			IJ.log("Unexpected bit depth ({}-bit), aborting".format(depth))
 			return
