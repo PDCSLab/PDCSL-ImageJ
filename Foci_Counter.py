@@ -1,7 +1,7 @@
 # Foci_Counter - Count H2A.X foci
 # Copyright © 2019 Damien Goutte-Gattat
 
-from ij import IJ, ImagePlus
+from ij import IJ
 from ij.measure import ResultsTable
 from ij.plugin import ChannelSplitter, ZProjector
 from ij.plugin.filter import ParticleAnalyzer
