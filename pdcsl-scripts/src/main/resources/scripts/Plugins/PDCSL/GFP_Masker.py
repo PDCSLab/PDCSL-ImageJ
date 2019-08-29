@@ -1,18 +1,11 @@
- # -*- coding: utf-8 -*
 # GFPMasker - Mask GFP-positive regions from a RFP channel
 # Copyright © 2019 Damien Goutte-Gattat
 
 from ij import IJ, ImagePlus
 from ij.plugin import ChannelSplitter, ImageCalculator
-from ij.plugin.filter import Binary
 from ij.process import ImageProcessor
 
-def apply_binary_filters(filters, imp):
-	"""Apply the named binary filters sequentially to the image."""
-	bf = Binary()
-	for filter_name in filters:
-		bf.setup(filter_name, imp)
-		bf.run(imp.getProcessor())
+from qmul.pdcsl.helper import apply_binary_filters
 
 imp = IJ.getImage()
 imps = ChannelSplitter.split(imp)
