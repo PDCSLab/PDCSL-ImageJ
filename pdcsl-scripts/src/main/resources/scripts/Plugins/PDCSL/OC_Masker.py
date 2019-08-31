@@ -6,6 +6,7 @@ from ij.process import AutoThresholder, ImageProcessor
 
 from qmul.pdcsl.helper import apply_binary_filters
 
+
 def do_threshold(proc, method, name):
     thresholder = AutoThresholder()
     threshold = thresholder.getThreshold(method, proc.getHistogram())
@@ -15,30 +16,35 @@ def do_threshold(proc, method, name):
     apply_binary_filters(['close', 'open'], mask)
     return mask.getProcessor()
 
-img = IJ.getImage()
-nslices = img.getNSlices()
-nchannels = img.getNChannels()
-new = IJ.createHyperStack("Masked", img.getWidth(), img.getHeight(),
-                          nchannels, nslices, 1, 8)
 
-CHANNEL_NAMES = ['EGFP', 'mTurquoise', 'mCherry', 'mCitrine', 'Cy5']
-THRESHOLD_METHODS = [
-        AutoThresholder.Method.Otsu,
-        AutoThresholder.Method.Otsu,
-        AutoThresholder.Method.Otsu,
-        AutoThresholder.Method.MaxEntropy,
-        AutoThresholder.Method.MaxEntropy
-        ]
+def run_script():
+    img = IJ.getImage()
+    nslices = img.getNSlices()
+    nchannels = img.getNChannels()
+    new = IJ.createHyperStack("Masked", img.getWidth(), img.getHeight(),
+                              nchannels, nslices, 1, 8)
 
-for i in range(nslices):
-    for j in range(nchannels):
-        img.setPosition(j+1, i+1, 1)
-        if j < 4:
-            mask = do_threshold(img.getProcessor(),
-                                THRESHOLD_METHODS[j], CHANNEL_NAMES[j])
-        else:
-            mask = img.getProcessor().duplicate()
-        new.setPosition(j+1, i+1, 1)
-        new.setProcessor(mask)
+    CHANNEL_NAMES = ['EGFP', 'mTurquoise', 'mCherry', 'mCitrine', 'Cy5']
+    THRESHOLD_METHODS = [
+            AutoThresholder.Method.Otsu,
+            AutoThresholder.Method.Otsu,
+            AutoThresholder.Method.Otsu,
+            AutoThresholder.Method.MaxEntropy,
+            AutoThresholder.Method.MaxEntropy
+            ]
 
-new.show()
+    for i in range(nslices):
+        for j in range(nchannels):
+            img.setPosition(j+1, i+1, 1)
+            if j < 4:
+                mask = do_threshold(img.getProcessor(),
+                                    THRESHOLD_METHODS[j], CHANNEL_NAMES[j])
+            else:
+                mask = img.getProcessor().duplicate()
+            new.setPosition(j+1, i+1, 1)
+            new.setProcessor(mask)
+
+    new.show()
+
+
+run_script()
