@@ -26,10 +26,10 @@ def run_script():
 
     CHANNEL_NAMES = ['EGFP', 'mTurquoise', 'mCherry', 'mCitrine', 'Cy5']
     THRESHOLD_METHODS = [
-            AutoThresholder.Method.Otsu,
-            AutoThresholder.Method.Otsu,
-            AutoThresholder.Method.Otsu,
-            AutoThresholder.Method.MaxEntropy,
+            AutoThresholder.Method.Moments,
+            AutoThresholder.Method.Moments,
+            AutoThresholder.Method.Moments,
+            AutoThresholder.Method.Moments,
             AutoThresholder.Method.MaxEntropy
             ]
 
