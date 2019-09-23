@@ -14,7 +14,7 @@ _default_channel_names = ['EGFP', 'mTurquoise', 'mCherry', 'mCitrine', 'Cy5']
 _default_thresholders = [
     AutoThresholder.Method.Moments,
     AutoThresholder.Method.Moments,
-    AutoThresholder.Method.Moments,
+    AutoThresholder.Method.MaxEntropy,
     AutoThresholder.Method.Moments,
     AutoThresholder.Method.MaxEntropy
     ]
