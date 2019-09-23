@@ -41,7 +41,7 @@ def run_script():
 				counter = rt.getCounter()
 				values[i] += n
 
-	IJ.log("{},{},{},{},{}".format(values[0], values[1], values[2], values[3], values[4]))
+	IJ.log("{},{},{},{},{},{}".format(img.getTitle(),values[0], values[1], values[2], values[3], values[4]))
 
 
 run_script()
