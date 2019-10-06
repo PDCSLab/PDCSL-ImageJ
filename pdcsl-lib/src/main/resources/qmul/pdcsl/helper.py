@@ -70,3 +70,23 @@ def apply_mask(source, mask):
 
     masked = calc.run("Multiply create", source_image, mask_image)
     return masked.getProcessor()
+
+
+def get_black_pixels_count(ip):
+    """Count the number of black pixels in an inage.
+
+    :param ip: The image whose black pixels should be counted
+    :type ip: ij.process.ImageProcessor
+    :returns: The number of black pixels
+    :rtype: int
+    """
+    width = ip.getWidth()
+    height = ip.getHeight()
+    pixels = ip.getIntArray()
+    n = 0
+
+    for x in range(width):
+        for y in range(height):
+            if pixels[x][y] == 0:
+                n += 1
+    return n
