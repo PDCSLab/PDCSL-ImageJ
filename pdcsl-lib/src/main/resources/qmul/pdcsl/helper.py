@@ -73,7 +73,7 @@ def apply_mask(source, mask):
 
 
 def get_black_pixels_count(ip):
-    """Count the number of black pixels in an inage.
+    """Count the number of black pixels in an image.
 
     :param ip: The image whose black pixels should be counted
     :type ip: ij.process.ImageProcessor
@@ -90,3 +90,30 @@ def get_black_pixels_count(ip):
             if pixels[x][y] == 0:
                 n += 1
     return n
+
+
+def extract_volumes(image, channels='all'):
+    """Get volumes occupied by black pixels in a stack.
+
+    :param image: The image to extract volumes from
+    :type image: ij.ImagePlus
+    :param channels: A list of 0-based channel indexes to process,
+        or 'all' (default) to process all channels
+    :type channels: list(int) or 'all'
+    :returns: An array containing the volume for each channel
+    :rtype: list(float)
+    """
+    cal = image.getCalibration()
+    voxel = cal.pixelWidth * cal.pixelHeight * cal.pixelDepth
+    volumes = []
+    if channels == 'all':
+        channels = range(image.getNChannels())
+
+    for i in channels:
+        n = 0
+        for j in range(image.getNSlices()):
+            image.setPosition(i + 1, j + 1, 1)
+            n = n + (get_black_pixels_count(image.getProcessor()) * voxel)
+        volumes.append(n)
+
+    return volumes
