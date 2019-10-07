@@ -4,6 +4,8 @@
 
 """Common helper functions for ImageJ."""
 
+import os.path
+
 from ij import ImagePlus
 from ij.plugin import ImageCalculator
 from ij.plugin.filter import Binary
@@ -117,3 +119,53 @@ def extract_volumes(image, channels='all'):
         volumes.append(n)
 
     return volumes
+
+
+def parse_csv_batch(pathname):
+    """Parse a CSV file containing a list of images to process.
+
+    The file is expected to contain one line per image file to process.
+    Each line should contain at list a 'Image' field containing the pathname
+    to the image. If that pathname is not absolute, it is assumed to be
+    relative to the directory containing the CSV file.
+
+    The file may contain a header line starting with '#HDR:' giving the
+    name of the different fields.
+
+    :param pathname: The pathname to the file to read
+    :type pathname: str
+    :returns: A tuple containing the list of items found in the file and
+        the list of headers
+    """
+    headers = ['Image']
+    image_index = 0
+    items = []
+    basename = os.path.dirname(pathname)
+
+    with open(pathname, 'r') as f:
+        for line in f:
+            line = line.strip()
+
+            if len(line) == 0:
+                continue
+
+            if line.startswith('#HDR:'):
+                headers = line[5:].split(',')
+                try:
+                    image_index = headers.index('Image')
+                except ValueError:
+                    raise RuntimeError("No 'Image' field in headers list")
+                continue
+
+            if line.startswith('#'):
+                continue
+
+            fields = line.split(',')
+            if len(fields) != len(headers):
+                raise RuntimeError("Unexpected number of fields (expected {}, found {})".format(len(headers), len(fields)))
+
+            if not fields[image_index].startswith('/'):
+                fields[image_index] = os.path.join(basename, fields[image_index])
+            items.append(fields)
+
+    return (items, headers)
