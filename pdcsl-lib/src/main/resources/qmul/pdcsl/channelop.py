@@ -124,7 +124,7 @@ def apply_channel_opstring(image, opstring, name=None, channel_order='BCGYRF'):
 
     operations = []
     for operation in opstring.split(','):
-        channel,opcode = operation.split(':')
+        channel,opcode = operation.strip().split(':')
         try:
             index = int(channel)
         except:
