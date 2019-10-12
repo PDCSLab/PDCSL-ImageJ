@@ -3,14 +3,19 @@
 
 from ij import IJ
 from qmul.pdcsl.helper import extract_volumes
-from qmul.pdcsl.oncochrome import create_masks
+from qmul.pdcsl.channelop import apply_channel_op
 
 
 def run_script():
     img = IJ.getImage()
 
-    masks = create_masks(img)
-    masks.setCalibration(img.getCalibration())
+    ops = [
+            [2, 'MASK(Moments)'],
+            [1, 'MASK(Moments)'],
+            [4, 'MASK(Moments)'],
+            [3, 'MASK(MaxEntropy)']
+            ]
+    masks = apply_channel_op(img, ops)
     masks.show()
 
     values = extract_volumes(masks, range(4))
