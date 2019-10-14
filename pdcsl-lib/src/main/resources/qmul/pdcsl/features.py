@@ -47,7 +47,7 @@ class NucleiSegmenter():
         copy.setThreshold(threshold, 255, ImageProcessor.NO_LUT_UPDATE)
 
         segmented = copy.createMask()
-        self._edm.toWatershed(segmented)
+        self._EDM.toWatershed(segmented)
         segmented.invert()
 
         return segmented
@@ -82,7 +82,7 @@ class NucleiSegmenter():
         elif slices == 'all':
             slices = [n + 1 for n in range(image.getNSlices())]
 
-        if frames == 'current']:
+        if frames == 'current':
             frames = [image.getT()]
         elif frames == 'all':
             frames = [n + 1 for n in range(image.getNFrames())]

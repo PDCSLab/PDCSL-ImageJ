@@ -20,15 +20,15 @@ def run_script(do_stack):
     if do_stack:
         segmented = segmenter.segment_hyperstack(image, channels='all')
         counter = 0
-        values = [0 for n in segmented.getNChannels()]
+        values = [0 for n in range(segmented.getNChannels())]
 
         for i in range(segmented.getNChannels()):
             for j in range(segmented.getNSlices()):
                 segmented.setPosition(i + 1, j + 1, 1)
 
                 if analyzer.analyze(segmented):
-                    n = rt.getCounter() - counter
-                    counter = rt.getCounter()
+                    n = results.getCounter() - counter
+                    counter = results.getCounter()
                     values[i] += n
 
         fmt = "{}" + ",{}" * len(values)
