@@ -55,3 +55,11 @@ Install the helper library `pdcsl-lib/target/pdcsl-lib-x.y.z.jar` in the
 `$IMAGEJ/jars/Lib` folder of your ImageJ/Fiji installation; then install
 the scripts library `pdcsl-scripts/target/pdcsl-scripts-x.y.z.jar` in
 the `$IMAGEJ/plugins` folder.
+
+
+Copying
+-------
+
+PDCSL-ImageJ is distributed under the terms of the GNU General Public
+License, version 3 or higher. The full license is included in the
+[COPYING file](COPYING) of the source distribution.
