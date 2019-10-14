@@ -14,8 +14,10 @@ def run_script(do_stack):
     image = IJ.getImage()
     segmenter = NucleiSegmenter()
     results = ResultsTable()
-    analyzer = ParticleAnalyzer(ParticleAnalyzer.SHOW_OUTLINES | ParticleAnalyzer.DISPLAY_SUMMARY,
-                                0, results, 0.0, 500.0, 0.0, 1.0)
+    flags = ParticleAnalyzer.DISPLAY_SUMMARY
+    if not do_stack:
+        flags |= ParticleAnalyzer.SHOW_OUTLINES
+    analyzer = ParticleAnalyzer(flags, 0, results, 0.0, 500.0, 0.0, 1.0)
 
     if do_stack:
         segmented = segmenter.segment_hyperstack(image, channels='all')
