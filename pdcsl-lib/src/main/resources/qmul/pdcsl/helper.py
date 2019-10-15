@@ -10,6 +10,7 @@ from ij import ImagePlus
 from ij.plugin import ImageCalculator
 from ij.plugin.filter import Binary
 from ij.process import AutoThresholder, ImageProcessor
+from loci.plugins import BF
 
 
 def apply_binary_filters(filters, image):
@@ -119,6 +120,25 @@ def extract_volumes(image, channels='all'):
         volumes.append(n)
 
     return volumes
+
+
+def open_images(pathname):
+    """Open an image file.
+
+    Open the specified image file using either ImageJ's built-in
+    open function or the LOCI plugin, depending on the filename's
+    extension.
+
+    :param pathname: Pathname to the file to open
+    :type pathname: str
+    :returns: A list of images
+    :rtype: list(ij.ImagePlus)
+    """
+    if pathname.endswith('.czi'):
+        images = BF.openImagePlus(pathname)
+    else:
+        images = [IJ.openImage(pathname)]
+    return images
 
 
 def parse_csv_batch(pathname):
