@@ -10,7 +10,14 @@ from ij import ImagePlus
 from ij.plugin import ImageCalculator
 from ij.plugin.filter import Binary
 from ij.process import AutoThresholder, ImageProcessor
+from loci.formats import ImageReader
 from loci.plugins import BF
+
+
+def get_bioformats_extensions():
+    ir = ImageReader()
+    extensions = ['.' + ext for ext in ir.getSuffixes() if len(ext) > 0]
+    return extensions
 
 
 def apply_binary_filters(filters, image):

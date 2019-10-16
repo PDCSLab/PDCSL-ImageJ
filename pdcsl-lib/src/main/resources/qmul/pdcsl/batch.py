@@ -4,9 +4,11 @@
 
 """Helper functions for batch processing."""
 
+import os
+
 from ij import IJ
 
-from qmul.pdcsl.helper import parse_csv_batch, open_images
+from qmul.pdcsl.helper import parse_csv_batch, open_images, get_bioformats_extensions
 
 
 def _format_header(fields, result_info):
@@ -38,9 +40,10 @@ def run_batch(pathname, func, result_info, options={}, default_fields=[]):
     This function opens the image(s) specified by the `pathname`
     argument and calls the `func` analysis procedure on each image.
 
-    The pathname can point either to an image file (which may itself
-    contain several images) or to a CSV file which is then expected to
-    contain a list of image files. Here is an example CSV file:
+    The pathname can point to: a folder containing the image files to
+    process; an image file (which may itself contain several images);
+    or a CSV file which is then expected to contain a list of image
+    filenames. Here is an example CSV file:
 
     ```
     #HDR:Image,Field1,Field2
@@ -93,7 +96,14 @@ def run_batch(pathname, func, result_info, options={}, default_fields=[]):
               options={'foobar': True})
     ```
     """
-    if not pathname.endswith('.csv'):
+    if os.path.isdir(pathname):
+        header = _format_header([a for a, b in default_fields], result_info)
+        IJ.log(header)
+        extensions = get_bioformats_extensions()
+        filenames = [os.path.join(pathname, fn) for fn in os.listdir() if os.path.splitext(fn)[1] in extensions]
+        for filename in filenames:
+            _process_file(filename, func, result_info, [b for a, b in default_fields], options)
+    elif not pathname.endswith('.csv'):
         header = _format_header([a for a, b in default_fields], result_info)
         IJ.log(header)
         _process_file(pathname, func, result_info, [b for a, b in default_fields], options)
