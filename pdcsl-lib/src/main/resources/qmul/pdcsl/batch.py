@@ -7,8 +7,9 @@
 import os
 
 from ij import IJ
+from loci.plugins import BF
 
-from qmul.pdcsl.helper import parse_csv_batch, open_images, get_bioformats_extensions
+from qmul.pdcsl.helper import parse_csv_batch, get_bioformats_extensions
 
 
 def _format_header(fields, result_info):
@@ -24,7 +25,7 @@ def _format_result(title, fields, result_info, results):
 
 
 def _process_file(pathname, func, result_info, fields, options):
-    images = open_images(pathname)
+    images = BF.openImagePlus(pathname)
     for image in images:
         results = func(image, fields=fields, **options)
         if results:
