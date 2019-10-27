@@ -5,8 +5,7 @@ from ij import IJ, ImagePlus
 from ij.plugin import ChannelSplitter
 from ij.process import ImageProcessor
 
-from qmul.pdcsl.helper import apply_binary_filters, apply_mask
-
+from org.incenp.imagej.helper import applyMask
 
 def run_script():
     imp = IJ.getImage()
@@ -19,19 +18,23 @@ def run_script():
 
     # Create mask for the GFP area
     mask = ImagePlus("gfp_mask", gfp.getProcessor().createMask())
-    apply_binary_filters(["close", "open"], mask)
+    mask.getProcessor().invert()
+    mask.getProcessor().dilate(1, 255)
+    mask.getProcessor().erode(1, 255)
+    mask.getProcessor().erode(1, 255)
+    mask.getProcessor().dilate(1, 255)
 
     # Create the image corresponding to the RFP channel
     # with the GFP region excluded
     rfp_excl_gfp = ImagePlus("{} - RFP outside GFP areas".format(imp.getTitle()),
-                             apply_mask(rfp.getProcessor(),
+                             applyMask(rfp.getProcessor(),
                                         mask.getProcessor()))
     rfp_excl_gfp.show()
 
     # Invert the nask and create opposite image
     mask.getProcessor().invert()
     rfp_incl_gfp = ImagePlus("{} - RFP inside GFP area".format(imp.getTitle()),
-                             apply_mask(rfp.getProcessor(),
+                             applyMask(rfp.getProcessor(),
                                         mask.getProcessor()))
     rfp_incl_gfp.show()
 

@@ -4,18 +4,18 @@
 #@ String (label="Channel order", default="GCRYF") channel_order
 
 from ij import IJ
-from qmul.pdcsl.helper import extract_volumes
-from qmul.pdcsl.channelop import apply_channel_opstring
+from org.incenp.imagej.Helper import extractVolumes
+from org.incenp.imagej.ChannelMasker import applyMasker
 
 
 def run_script():
     img = IJ.getImage()
 
     ops = 'G:MASK(Huang),C:MASK(Moments),G:MASK(Moments),Y:MASK(Moments),R:MASK(MaxEntropy)'
-    masks = apply_channel_opstring(img, ops, channel_order=channel_order)
+    masks = applyMasker(img, ops, img.getTitle() + " Masks", channel_order)
     masks.show()
 
-    values = extract_volumes(masks, range(5))
+    values = extractVolumes(masks)
 
     fmt = "{}" + ",{:2f}" * 5
     IJ.log(fmt.format(img.getTitle(), *values))

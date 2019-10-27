@@ -7,12 +7,12 @@ from ij import IJ, ImagePlus
 from ij.measure import ResultsTable
 from ij.plugin.filter import ParticleAnalyzer
 
-from qmul.pdcsl.features import NucleiSegmenter
+from org.incenp.imagej import NucleiSegmenter
 
 
 def run_script(do_stack):
     image = IJ.getImage()
-    segmenter = NucleiSegmenter()
+    segmenter = NucleiSegmenter(2.0)
     results = ResultsTable()
     flags = ParticleAnalyzer.DISPLAY_SUMMARY
     if not do_stack:
@@ -20,7 +20,7 @@ def run_script(do_stack):
     analyzer = ParticleAnalyzer(flags, 0, results, 0.0, 500.0, 0.0, 1.0)
 
     if do_stack:
-        segmented = segmenter.segment_hyperstack(image, channels='all')
+        segmented = segmenter.segment(image, [i + 1 for i in range(image.getNChannels())])
         counter = 0
         values = [0 for n in range(segmented.getNChannels())]
 

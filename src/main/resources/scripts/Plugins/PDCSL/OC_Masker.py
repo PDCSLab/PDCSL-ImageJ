@@ -4,18 +4,18 @@
 #@ String (label="Channel order", default="GCRYF") channel_order
 
 from ij import IJ
-from qmul.pdcsl.channelop import apply_channel_opstring
+from org.incenp.imagej.ChannelMasker import applyMasker
 
 
 def run_script():
     img = IJ.getImage()
 
     ops = 'C:MASK(Moments),G:MASK(Moments),Y:MASK(Moments),R:MASK(MaxEntropy),F:COPY()'
-    masks = apply_channel_opstring(img, ops, channel_order=channel_order)
+    masks = applyMasker(img, ops, img.getTitle() + " Masks", channel_order)
     masks.show()
 
     ops = '5:APPLY(1),5:APPLY(2),5:APPLY(3),5:APPLY(4),5:COPY()'
-    masked = apply_channel_opstring(masks, ops)
+    masked = applyMasker(masks, ops, img.getTitle() + " Masked", None)
     masked.show()
 
 
