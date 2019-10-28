@@ -4,7 +4,7 @@
 #@ String (label="Channel order", default="GCRYF") channel_order
 
 from ij import IJ
-from org.incenp.imagej.ChannelMasker import applyMasker
+from org.incenp.imagej import ChannelMasker
 
 
 def run_script():
