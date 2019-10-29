@@ -1,5 +1,7 @@
-# OC_Volume_Counter - Compute volume occupied by OncoChrome fluorophores
+# PDCSL-ImageJ - PDCS Lab’s ImageJ Collection
 # Copyright © 2019 Damien Goutte-Gattat
+#
+# OC_Volume_Counter: Compute volume occuped by OncoChrome fluorophores
 
 #@ String (label="Channel order", default="GCRYF") channel_order
 

@@ -1,5 +1,7 @@
-# GFPMasker - Mask GFP-positive regions from a RFP channel
+#PDCSL-ImageJ - PDCS Lab’s ImageJ Collection
 # Copyright © 2019 Damien Goutte-Gattat
+#
+# GFP_Masker: Mask GFP-positive regions from a RFP channel
 
 from ij import IJ, ImagePlus
 from ij.plugin import ChannelSplitter

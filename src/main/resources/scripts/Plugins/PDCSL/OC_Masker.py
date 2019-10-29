@@ -1,5 +1,7 @@
-# OCMasker - Create masks for OncoChrome-positive regions
+# PDCSL-ImageJ - PDCS Lab’s ImageJ Collection
 # Copyright © 2019 Damien Goutte-Gattat
+#
+# OC_Masker: Create masks for OncoChrome-positive regions
 
 #@ String (label="Channel order", default="GCRYF") channel_order
 

@@ -1,5 +1,7 @@
-# Foci_Counter - Count H2A.X foci
+# PDCSL-ImageJ - PDCS Lab’s ImageJ Collection
 # Copyright © 2019 Damien Goutte-Gattat
+#
+# Foci_Counter: Count H2A.X foci
 
 from ij import IJ
 from ij.measure import ResultsTable

@@ -1,5 +1,7 @@
-# NucleiCounter - Count cell nuclei
+# PDCSL-ImageJ - PDCS Lab’s ImageJ Collection
 # Copyright © 2019 Damien Goutte-Gattat
+#
+# Nuclei_Counter: Count cell nuclei
 
 #@ Boolean (label="Process entire stack", default=true) do_stack
 
