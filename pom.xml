@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>uk.ac.qmul.bci</groupId>
   <artifactId>pdcsl-imagej</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.1</version>
 
   <name>PDCSL-ImageJ</name>
   <description>A collection of scripts from the PDCS Lab at the Barts Cancer Institute.</description>
@@ -28,7 +26,7 @@
     <connection>scm:git:git://uk-chs-lgit01/~gattat01/imagej.git</connection>
     <developerConnection>scm:git:http://gattat01@uk-chs-lgit01:8080/gitblit/r/~gattat01/imagej.git </developerConnection>
     <url>http://uk-chs-lgit01:8080/gitblit/summary/~gattat01!imagej.git</url>
-    <tag>HEAD</tag>
+    <tag>pdcsl-imagej-0.1.1</tag>
   </scm>
 
   <properties>
