@@ -23,7 +23,14 @@
       <email>d.goutte-gattat@qmul.ac.uk</email>
     </developer>
   </developers>
-  
+
+  <scm>
+    <connection>scm:git:git://uk-chs-lgit01/~gattat01/imagej.git</connection>
+    <developerConnection>scm:git:http://gattat01@uk-chs-lgit01:8080/gitblit/r/~gattat01/imagej.git </developerConnection>
+    <url>http://uk-chs-lgit01:8080/gitblit/summary/~gattat01!imagej.git</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -75,6 +82,11 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
       </plugin>
     </plugins>
   </build>
