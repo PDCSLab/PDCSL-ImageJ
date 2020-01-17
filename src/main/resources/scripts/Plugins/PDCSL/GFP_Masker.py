@@ -7,7 +7,7 @@ from ij import IJ, ImagePlus
 from ij.plugin import ChannelSplitter
 from ij.process import ImageProcessor
 
-from org.incenp.imagej.helper import applyMask
+from org.incenp.imagej.Helper import applyMask
 
 def run_script():
     imp = IJ.getImage()

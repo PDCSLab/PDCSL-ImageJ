@@ -4,6 +4,7 @@
 import os
 
 from ij import IJ
+from ij.measure import ResultsTable
 
 from org.incenp.imagej.ChannelMasker import applyMasker
 from org.incenp.imagej.Helper import extractVolumes
@@ -19,35 +20,31 @@ create_masks_command = '''
     '''
     
 
-def process_image(image, fields, savedir=None):
-    masks = applyMasker(image, create_masks_command, image.getTitle(), fields[0])
+def process_image(image, order, results, savedir=None):
+    masks = applyMasker(image, create_masks_command, image.getTitle(), order)
     volumes = extractVolumes(masks)
+    for i, label in enumerate(["Volume", "mTurquoise", "EGFP", "Citrine", "mCherry"]):
+        results.addValue(label, volumes[i])
     
     if savedir:
         outname = os.path.join(savedir, os.path.splitext(masks.getTitle())[0]) + '.tiff'
         IJ.saveAsTiff(masks, outname)
         
     masks.close()
-    
-    return volumes
 
 
 def run_script():
     pathname = input_file.getAbsolutePath()
     savedir = os.path.dirname(pathname) if save_masks else None
+    results = ResultsTable()
     
     batch = BatchReader(pathname)
-    batch.readCSV()
-    
-    IJ.log(",".join(batch.getHeaders()) + ",Volume,mTurquoise,EGFP,Citrine,mCherry")
-    fmt = ",{:.2f}" * 5
-    
     while batch.next():
         img = batch.getImage()
-        volumes = process_image(img, batch.getFields(), savedir=savedir)
-        
-        IJ.log(batch.getCSVRow() + fmt.format(*volumes))
+        batch.fillResultsTable(results)
+        process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
         img.close()
+        results.show("OC Volumetric Analysis Results")
         
         
 run_script()

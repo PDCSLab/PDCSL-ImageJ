@@ -5,16 +5,19 @@
 
 package ac.uk.qmul.bci.pdcsl.imagej;
 
+import java.awt.Window;
+
 import org.incenp.imagej.NucleiSegmenter;
 import org.scijava.command.Command;
-import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
 import ij.ImagePlus;
+import ij.WindowManager;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.ParticleAnalyzer;
+import ij.text.TextWindow;
 
 @Plugin(type = Command.class, menuPath = "Plugins>PDCSL>Nuclei Counter")
 public class NucleiCounter implements Command {
@@ -30,9 +33,6 @@ public class NucleiCounter implements Command {
 
     @Parameter
     private UIService uiService;
-
-    @Parameter
-    private LogService logService;
 
     @Override
     public void run() {
@@ -52,31 +52,41 @@ public class NucleiCounter implements Command {
 
         ImagePlus segmented = ns.segment(image, channels);
 
+        ResultsTable rt2 = getResultsTable();
+        rt2.incrementCounter();
+        rt2.addLabel(image.getTitle());
+
         int counter = 0;
-        int[] values = new int[channels.length];
 
         for ( int i = 0; i < channels.length; i++ ) {
+            int value = 0;
             for ( int j = 0; j < segmented.getNSlices(); j++ ) {
                 segmented.setPosition(i + 1, j + 1, 1);
 
                 if ( pa.analyze(segmented) ) {
                     int n = rt.getCounter() - counter;
                     counter = rt.getCounter();
-                    values[i] += n;
+                    value += n;
                 }
             }
+            rt2.addValue(String.format("Channel %d", i + 1), value);
         }
+
+        rt2.show("Nuclei Counter");
 
         if ( showSegmentedImage )
             uiService.show(segmented);
         else
             segmented.close();
+    }
 
-        StringBuilder fmt = new StringBuilder();
-        fmt.append(image.getTitle());
-        for ( int value : values )
-            fmt.append(String.format(",%d", value));
-        logService.info(fmt.toString());
+    private ResultsTable getResultsTable() {
+        Window w = WindowManager.getWindow("Nuclei Counter");
+        if ( w != null && w instanceof TextWindow ) {
+            return ((TextWindow) w).getTextPanel().getOrCreateResultsTable();
+        }
+
+        return new ResultsTable();
     }
 
 }
