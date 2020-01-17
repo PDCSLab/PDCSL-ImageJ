@@ -52,14 +52,18 @@ def count_cell_nuclei(image):
     return values
 
 
-def process_image(image, fields, savedir=None):
-    masks = applyMasker(image, create_masks_command, image.getTitle(), fields[0])
+def process_image(image, order, results, savedir=None):
+    masks = applyMasker(image, create_masks_command, image.getTitle(), order)
     volumes = extractVolumes(masks, [1,2,3,4,5])
+    for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
+        results.addValue(label, volumes[i])
 
     segmenter = NucleiSegmenter(2.0)
     masked = applyMasker(masks, apply_masks_command, masks.getTitle(), None)
     segmented = segmenter.segment(masked, [1,2,3,4,5])
     nuclei = count_cell_nuclei(segmented)
+    for i, label in enumerate(["N_Total", "N_mTurquoise", "N_GFP", "N_Citrine", "N_mCherry"]):
+        results.addValue(label, nuclei[i])
 
     if savedir:
         outname = os.path.join(savedir, os.path.splitext(masks.getTitle())[0]) + '.tiff'
@@ -68,25 +72,19 @@ def process_image(image, fields, savedir=None):
     masks.close()
     masked.close()
 
-    return list(volumes) + nuclei
-
 
 def run_script():
     pathname = input_file.getAbsolutePath()
     savedir = os.path.dirname(pathname) if save_masks else None
     batch = BatchReader(pathname)
-    batch.readCSV()
-
-    IJ.log(",".join(batch.getHeaders()) + ",Volume,mTurquoise,EGFP,Citrine,mCherry,N_Total,N_mTurquoise,N_EGFP,N_Citrine,N_mCherry")
-    fmt = ",{:.2f}" * 5 + ",{}" * 5
+    results = ResultsTable()
 
     while batch.next():
         img = batch.getImage()
-        values = process_image(img, batch.getFields(), savedir=savedir)
-
-        IJ.log(batch.getCSVRow() + fmt.format(*values))
-
+        batch.fillResultsTable(results)
+        process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
         img.close()
+        results.show("OC Repo Counter Results")
 
 
 run_script()
