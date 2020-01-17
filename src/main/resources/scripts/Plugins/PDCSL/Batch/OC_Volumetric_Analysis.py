@@ -6,7 +6,7 @@ import os
 from ij import IJ
 from ij.measure import ResultsTable
 
-from org.incenp.imagej.ChannelMasker import applyMasker
+from org.incenp.imagej.ChannelMasker import createMasker
 from org.incenp.imagej.Helper import extractVolumes
 from org.incenp.imagej import BatchReader
 
@@ -18,10 +18,12 @@ create_masks_command = '''
     Y:MASK(Moments),
     R:MASK(MaxEntropy)
     '''
-    
+
+masker = createMasker(create_masks_command)
+
 
 def process_image(image, order, results, savedir=None):
-    masks = applyMasker(image, create_masks_command, image.getTitle(), order)
+    masks = masker.apply(image, image.getTitle(), order)
     volumes = extractVolumes(masks)
     for i, label in enumerate(["Volume", "mTurquoise", "EGFP", "Citrine", "mCherry"]):
         results.addValue(label, volumes[i])

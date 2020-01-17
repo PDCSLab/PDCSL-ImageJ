@@ -7,11 +7,10 @@ from ij import IJ
 from ij.measure import ResultsTable
 from ij.plugin.filter import ParticleAnalyzer
 
-from org.incenp.imagej.ChannelMasker import applyMasker
+from org.incenp.imagej.ChannelMasker import createMasker
 from org.incenp.imagej import NucleiSegmenter
 from org.incenp.imagej.Helper import extractVolumes
 from org.incenp.imagej import BatchReader
-
 
 create_masks_command = '''
     G:MASK(Huang),
@@ -29,6 +28,9 @@ apply_masks_command = '''
     6:APPLY(4),
     6:APPLY(5)
     '''
+
+masker = createMasker(create_masks_command)
+applier = createMasker(apply_masks_command)
 
 
 def count_cell_nuclei(image):
@@ -53,13 +55,13 @@ def count_cell_nuclei(image):
 
 
 def process_image(image, order, results, savedir=None):
-    masks = applyMasker(image, create_masks_command, image.getTitle(), order)
+    masks = masker.apply(image, image.getTitle(), order)
     volumes = extractVolumes(masks, [1,2,3,4,5])
     for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
         results.addValue(label, volumes[i])
 
     segmenter = NucleiSegmenter(2.0)
-    masked = applyMasker(masks, apply_masks_command, masks.getTitle(), None)
+    masked = applier.apply(masks, masks.getTitle(), None)
     segmented = segmenter.segment(masked, [1,2,3,4,5])
     nuclei = count_cell_nuclei(segmented)
     for i, label in enumerate(["N_Total", "N_mTurquoise", "N_GFP", "N_Citrine", "N_mCherry"]):

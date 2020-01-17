@@ -16,8 +16,8 @@ import ij.ImagePlus;
 @Plugin(type = Command.class, menuPath = "Plugins>PDCSL>OC Masker")
 public class OCMasker implements Command {
 
-    private static String maskCommand = "C:MASK(Moments),G:MASK(Moments),Y:MASK(Moments),R:MASK(MaxEntropy),F:COPY()";
-    private static String applyCommand = "5:APPLY(1),5:APPLY(2),5:APPLY(3),5:APPLY(4),5:COPY()";
+	private static ChannelMasker masker = ChannelMasker.createMasker("C:MASK(Moments),G:MASK(Moments),Y:MASK(Moments),R:MASK(MaxEntropy),F:COPY()", true);
+	private static ChannelMasker applier = ChannelMasker.createMasker("5:APPLY(1),5:APPLY(2),5:APPLY(3),5:APPLY(4),5:COPY()", true);
 
     @Parameter
     private ImagePlus image;
@@ -30,10 +30,10 @@ public class OCMasker implements Command {
 
     @Override
     public void run() {
-        ImagePlus masks = ChannelMasker.applyMasker(image, maskCommand, image.getTitle() + " Masks", channelOrder);
+        ImagePlus masks = masker.apply(image, image.getTitle() + " Masks", channelOrder);
         uiService.show(masks);
 
-        ImagePlus masked = ChannelMasker.applyMasker(masks, applyCommand, image.getTitle() + " Masked", null);
+        ImagePlus masked = applier.apply(masks, image.getTitle() + " Masked");
         uiService.show(masked);
     }
 

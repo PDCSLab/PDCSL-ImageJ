@@ -5,8 +5,7 @@
 
 package ac.uk.qmul.bci.pdcsl.imagej;
 
-import java.awt.Window;
-
+import org.incenp.imagej.Helper;
 import org.incenp.imagej.NucleiSegmenter;
 import org.scijava.command.Command;
 import org.scijava.plugin.Parameter;
@@ -14,10 +13,8 @@ import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
 import ij.ImagePlus;
-import ij.WindowManager;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.ParticleAnalyzer;
-import ij.text.TextWindow;
 
 @Plugin(type = Command.class, menuPath = "Plugins>PDCSL>Nuclei Counter")
 public class NucleiCounter implements Command {
@@ -52,7 +49,7 @@ public class NucleiCounter implements Command {
 
         ImagePlus segmented = ns.segment(image, channels);
 
-        ResultsTable rt2 = getResultsTable();
+        ResultsTable rt2 = Helper.getResultsTable("Nuclei Counter");
         rt2.incrementCounter();
         rt2.addLabel(image.getTitle());
 
@@ -78,15 +75,6 @@ public class NucleiCounter implements Command {
             uiService.show(segmented);
         else
             segmented.close();
-    }
-
-    private ResultsTable getResultsTable() {
-        Window w = WindowManager.getWindow("Nuclei Counter");
-        if ( w != null && w instanceof TextWindow ) {
-            return ((TextWindow) w).getTextPanel().getOrCreateResultsTable();
-        }
-
-        return new ResultsTable();
     }
 
 }
