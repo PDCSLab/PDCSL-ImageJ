@@ -19,7 +19,7 @@ masker_pipeline = [
     createMasker('D:MASK(Minimum),M:MASK(Huang),S:COPY()', None, True),
 
     # Exclude the marked region from the wing discs mask
-    createMasker('1:COMBINE(2:XOR),2:COPY(),3:COPY()', None, True),
+    createMasker('1:COMBINE(2;XOR),2:COPY(),3:COPY()', None, True),
 
     # Apply both masks to the signal channel
     createMasker('3:APPLY(1),3:APPLY(2)', None, True)
@@ -30,7 +30,7 @@ def process_image(image, order, results, savedir=None):
     # Step 1: Max-project the stack
     projected = ZProjector.run(image, "max")
     # Step 2: Masking
-    masked = image
+    masked = projected
     for masker in masker_pipeline:
         masked = masker.apply(masked, image.getTitle(), order)
 
