@@ -1,24 +1,54 @@
 PDCSL-ImageJ
 ============
 
-This package provides a collection of ImageJ scripts from the Protein
-Dynamics and Cell Signalling Laboratory (PDCSL) at the Barts Cancer
-Institute (BCI), Queen Mary University of London.
+This package provides a collection of ImageJ scripts and plugins from
+the Protein Dynamics and Cell Signalling Laboratory (PDCSL) at the Barts
+Cancer Institute (BCI), Queen Mary University of London.
 
 
-Scripts
--------
+Scripts & Plugins
+-----------------
 
-Once installed (see next section), scripts in this package will be
-available from ImageJ’s `Plugins>PDCSL` menu.
+Once installed (see next section), scripts and plugins in this package
+will be available from ImageJ’s `Plugins>PDCSL` menu.
 
-* `Foci Counter`: Intended for counting counting ɣH2A.X foci
+* `Foci Counter`: Intended for counting counting ɣH2A.X foci.
 
-* `Nuclei Counter`: Intended for counting cell nuclei in fly tissues
+* `Nuclei Counter`: Intended for counting cell nuclei in fly tissues.
 
-* `OC Masker`: Create masks for OncoChrome-positive regions
+* `OC Masker`: Create masks for OncoChrome-positive regions.
 
-* `OC Volume Counter`: Extract volume of OncoChrome-positive regions
+* `OC Volume Counter`: Extract volume of OncoChrome-positive regions.
+
+
+Batch Scripts
+-------------
+
+Scripts intended to be run on a lot of images in batch mode (instead of
+a single, already opened image) will be available in the
+`Plugins>PDCSL>Batch` menu.
+
+* `Generic Volumetric Analysis`: Extract the volumes of regions
+  resulting from applying user-defined masks.
+  
+* `OC Repo Counter`: Extract the number of Repo-positive nuclei in
+  OncoChrome-positive regions.
+  
+* `OC Volumetric Analysis`: Extract volume of OncoChrome-positive
+  regions.
+  
+* `Quantify Wing Discs`: Intended to quantify fluorescence signal in
+  anterior and posterior compartments of fly wing discs.
+
+
+Dependencies
+------------
+
+Beyond the packages that should be part of any Fiji installation, this
+package also depends on the
+[incenp-plugins](https://incenp.org/dvlpt/imagej-plugins/) package,
+which is available at
+<https://git.incenp.org/damien/imagej-plugins/releases>.
 
 
 Build and Install
