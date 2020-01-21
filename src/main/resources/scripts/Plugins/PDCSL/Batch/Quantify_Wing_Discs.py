@@ -40,9 +40,9 @@ def process_image(image, order, results, savedir=None):
         IJ.saveAsTiff(masked, outname)
 
     # Quantify the signal on the masked image
-    for i,label in [(1, "Control"), (2, "Marked")]:
+    for i,label in enumerate(["Control", "Marked"]):
         # Select the channel
-        masked.setC(i)
+        masked.setC(i + 1)
         # Exclude black pixels (resulting from applying the masks)
         masked.getProcessor().setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
         # Extract mean intensity and area from the thresholded region
