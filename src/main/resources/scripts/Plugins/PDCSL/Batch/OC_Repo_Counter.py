@@ -3,7 +3,7 @@
 
 import os
 
-from ij import IJ
+from ij import IJ, Prefs
 from ij.measure import ResultsTable
 from ij.plugin.filter import ParticleAnalyzer
 
@@ -76,6 +76,8 @@ def process_image(image, order, results, savedir=None):
 
 
 def run_script():
+    savedBackgroundPref = Prefs.blackBackground
+    Prefs.blackBackground = True
     pathname = input_file.getAbsolutePath()
     savedir = os.path.dirname(pathname) if save_masks else None
     batch = BatchReader(pathname)
@@ -87,6 +89,8 @@ def run_script():
         process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
         img.close()
         results.show("OC Repo Counter Results")
+        
+    Prefs.blackBackground = savedBackgroundPref
 
 
 run_script()
