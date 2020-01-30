@@ -85,10 +85,11 @@ def run_script():
 
     while batch.next():
         img = batch.getImage()
-        batch.fillResultsTable(results)
-        process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
+        if img.getNChannels() >= 5:
+            batch.fillResultsTable(results)
+            process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
+            results.show("OC Repo Counter Results")
         img.close()
-        results.show("OC Repo Counter Results")
         
     Prefs.blackBackground = savedBackgroundPref
 
