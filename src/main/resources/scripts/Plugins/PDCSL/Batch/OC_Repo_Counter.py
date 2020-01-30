@@ -57,7 +57,7 @@ def count_cell_nuclei(image):
 def process_image(image, order, results, savedir=None):
     masks = masker.apply(image, image.getTitle(), order)
     volumes = extractVolumes(masks, [1,2,3,4,5])
-    for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
+    for i, label in enumerate(["Volume", "mTurquoise", "EGFP", "Citrine", "mCherry"]):
         results.addValue(label, volumes[i])
 
     segmenter = NucleiSegmenter(2.0)
