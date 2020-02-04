@@ -4,7 +4,7 @@
 
   <groupId>uk.ac.qmul.bci</groupId>
   <artifactId>pdcsl-imagej</artifactId>
-  <version>0.1.4-SNAPSHOT</version>
+  <version>0.1.4</version>
 
   <name>PDCSL-ImageJ</name>
   <description>A collection of scripts from the PDCS Lab at the Barts Cancer Institute.</description>
@@ -26,7 +26,7 @@
     <connection>scm:git:git://uk-chs-lgit01/~gattat01/imagej.git</connection>
     <developerConnection>scm:git:http://gattat01@uk-chs-lgit01:8080/gitblit/r/~gattat01/imagej.git </developerConnection>
     <url>http://uk-chs-lgit01:8080/gitblit/summary/~gattat01!imagej.git</url>
-    <tag>HEAD</tag>
+    <tag>pdcsl-imagej-0.1.4</tag>
   </scm>
 
   <properties>
