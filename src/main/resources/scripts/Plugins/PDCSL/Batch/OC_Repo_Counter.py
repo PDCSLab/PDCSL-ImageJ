@@ -1,5 +1,5 @@
-#@ File (label='Choose a CSV file', style='file') input_file
-#@ Boolean (label='Save mask images', value=false, persist=false) save_masks
+# @ File (label='Choose a CSV file', style='file') input_file
+# @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 
 import os
 
@@ -40,7 +40,7 @@ def count_cell_nuclei(image):
     rt = ResultsTable()
     analyzer = ParticleAnalyzer(ParticleAnalyzer.SHOW_NONE, 0, rt, 0.0, 500.0, 0.0, 1.0)
     counter = 0
-    values = [0,0,0,0,0]
+    values = [0, 0, 0, 0, 0]
 
     for i in range(nchannels):
         for j in range(nslices):
@@ -56,13 +56,13 @@ def count_cell_nuclei(image):
 
 def process_image(image, order, results, savedir=None):
     masks = masker.apply(image, image.getTitle(), order)
-    volumes = extractVolumes(masks, [1,2,3,4,5])
-    for i, label in enumerate(["Volume", "mTurquoise", "EGFP", "Citrine", "mCherry"]):
+    volumes = extractVolumes(masks, [1, 2, 3, 4, 5])
+    for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
         results.addValue(label, volumes[i])
 
     segmenter = NucleiSegmenter(2.0)
     masked = applier.apply(masks, masks.getTitle(), None)
-    segmented = segmenter.segment(masked, [1,2,3,4,5])
+    segmented = segmenter.segment(masked, [1, 2, 3, 4, 5])
     nuclei = count_cell_nuclei(segmented)
     for i, label in enumerate(["N_Total", "N_mTurquoise", "N_GFP", "N_Citrine", "N_mCherry"]):
         results.addValue(label, nuclei[i])
@@ -87,7 +87,7 @@ def run_script():
         img = batch.getImage()
         if img.getNChannels() >= 5:
             batch.fillResultsTable(results)
-            process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
+            process_image(img, batch.getCell("Channel Order"), results, savedir=savedir)
             results.show("OC Repo Counter Results")
         img.close()
         

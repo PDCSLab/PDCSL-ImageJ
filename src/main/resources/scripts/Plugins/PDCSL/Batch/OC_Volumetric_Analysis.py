@@ -1,5 +1,5 @@
-#@ File(label='Choose a CSV file', style='file') input_file
-#@ Boolean (label='Save mask images', value=false, persist=false) save_masks
+# @ File(label='Choose a CSV file', style='file') input_file
+# @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 
 import os
 
@@ -9,7 +9,6 @@ from ij.measure import ResultsTable
 from org.incenp.imagej.ChannelMasker import createMasker
 from org.incenp.imagej.Helper import extractVolumes
 from org.incenp.imagej import BatchReader
-
 
 create_masks_command = '''
     G:MASK(Huang),
@@ -25,7 +24,7 @@ masker = createMasker(create_masks_command)
 def process_image(image, order, results, savedir=None):
     masks = masker.apply(image, image.getTitle(), order)
     volumes = extractVolumes(masks)
-    for i, label in enumerate(["Volume", "mTurquoise", "EGFP", "Citrine", "mCherry"]):
+    for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
         results.addValue(label, volumes[i])
     
     if savedir:
@@ -45,7 +44,7 @@ def run_script():
         img = batch.getImage()
         if img.getNChannels() >= 4:
             batch.fillResultsTable(results)
-            process_image(img, batch.getCell("ChannelOrder"), results, savedir=savedir)
+            process_image(img, batch.getCell("Channel Order"), results, savedir=savedir)
             results.show("OC Volumetric Analysis Results")
         img.close()
         
