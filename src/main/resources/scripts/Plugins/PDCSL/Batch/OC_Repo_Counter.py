@@ -57,15 +57,15 @@ def count_cell_nuclei(image):
 def process_image(image, order, results, savedir=None):
     masks = masker.apply(image, image.getTitle(), order)
     volumes = extractVolumes(masks, [1, 2, 3, 4, 5])
-    for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
-        results.addValue(label, volumes[i])
+    for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry"]):
+        results.addValue("Vol_{}".format(label), volumes[i])
 
     segmenter = NucleiSegmenter(2.0)
     masked = applier.apply(masks, masks.getTitle(), None)
     segmented = segmenter.segment(masked, [1, 2, 3, 4, 5])
     nuclei = count_cell_nuclei(segmented)
-    for i, label in enumerate(["N_Total", "N_mTurquoise", "N_GFP", "N_Citrine", "N_mCherry"]):
-        results.addValue(label, nuclei[i])
+    for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry"]):
+        results.addValue("Nuc_{}".format(label), nuclei[i])
 
     if savedir:
         outname = os.path.join(savedir, os.path.splitext(masks.getTitle())[0]) + '.tiff'

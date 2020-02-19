@@ -24,8 +24,8 @@ masker = createMasker(create_masks_command)
 def process_image(image, order, results, savedir=None):
     masks = masker.apply(image, image.getTitle(), order)
     volumes = extractVolumes(masks)
-    for i, label in enumerate(["Volume", "mTurquoise", "GFP", "Citrine", "mCherry"]):
-        results.addValue(label, volumes[i])
+    for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry"]):
+        results.addValue("Vol_{}".format(label), volumes[i])
     
     if savedir:
         outname = os.path.join(savedir, os.path.splitext(masks.getTitle())[0]) + '.tiff'
