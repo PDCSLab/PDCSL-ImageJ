@@ -15,8 +15,8 @@ from org.incenp.imagej import Masking
 from org.incenp.imagej import BatchReader
 
 masker = createMasker('G:MASK(Huang),F:COPY()').chain(
-         createMasker('1:COPY(),2:MASK(MaxEntropy)', None, 0).chain(
-         createMasker('2:APPLY(1),1:COPY()')))
+         createMasker('1:COPY(),2:MASK(MaxEntropy),2:COPY()').chain(
+         createMasker('2:APPLY(1),1:COPY(),3:COPY()')))
 
 
 def process_image(image, order, results, savedir=None):
