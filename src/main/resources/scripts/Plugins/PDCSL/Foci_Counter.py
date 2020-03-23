@@ -5,7 +5,7 @@
 #
 # Foci_Counter: Count H2A.X foci
 
-from ij import IJ
+from ij import IJ, ImagePlus
 from ij.measure import ResultsTable
 from ij.plugin import ChannelSplitter, ZProjector
 from ij.plugin.filter import ParticleAnalyzer
@@ -19,7 +19,7 @@ def run_script():
     # Save any existing ROI
     roi = img.getRoi()
     if roi:
-        mask = img.getMask()
+        roi = roi.getInverse(img)
 
     # Save existing thresholds
     mint = img.getProcessor().getMinThreshold()
@@ -40,23 +40,26 @@ def run_script():
         threshold = AutoThresholder().getThreshold('MaxEntropy', channel.getProcessor().getHistogram())
         channel.getProcessor().setThreshold(threshold, 255, ImageProcessor.NO_LUT_UPDATE)
         
+    # Create thresholded image
+    thresholded = channel.getProcessor().createMask()
+    thresholdedImage = ImagePlus("Thresholded", thresholded)
+        
     # Do a close-open cycle to smooth the mask
-    channel.getProcessor().dilate(1, 0)
-    channel.getProcessor().erode(1, 0)
-    channel.getProcessor().erode(1, 0)
-    channel.getProcessor().dilate(1, 0)
+    thresholded.dilate(1, 0)
+    thresholded.erode(1, 0)
+    thresholded.erode(1, 0)
+    thresholded.dilate(1, 0)
 
     # If a ROI was active on the original image, apply it to the projection
     if roi:
-        channel.setRoi(roi)
-        channel.getProcessor().setMask(mask)
+        thresholdedImage.setRoi(roi)
 
-    channel.show()
+    thresholdedImage.show()
 
     # Run the particle analyzer
     rt = ResultsTable()
     analyzer = ParticleAnalyzer(ParticleAnalyzer.SHOW_OUTLINES | ParticleAnalyzer.DISPLAY_SUMMARY, 0, rt, 3.0, 50.0, 0.0, 1.0)
-    if analyzer.analyze(channel):
+    if analyzer.analyze(thresholdedImage):
         output = analyzer.getOutputImage()
         output.show()
 
