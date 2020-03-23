@@ -31,7 +31,7 @@ def process_image(image, order, results, savedir=None):
         
         mask.setC(2)
         mask.getProcessor().setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
-        stats = ImageStatistics.getStatistics(mask.getProcessor(), ImageStatistics.LIMIT, None)
+        stats = ImageStatistics.getStatistics(mask.getProcessor(), ImageStatistics.LIMIT, mask.getCalibration())
         results.addValue("Area", stats.area)
         
     if savedir:
