@@ -1,4 +1,5 @@
 # @ File(label='Choose a CSV file', style='file') input_file
+# @ String(label='Thresholding method', value='MaxEntropy') method
 # @ Boolean(label='Save mask images', value=false, persist=false) save_masks
 
 import os
@@ -15,7 +16,7 @@ from org.incenp.imagej import Masking
 from org.incenp.imagej import BatchReader
 
 masker = createMasker('G:MASK(Huang),F:COPY()').chain(
-         createMasker('1:COPY(),2:MASK(MaxEntropy),2:COPY()').chain(
+         createMasker('1:COPY(),2:MASK({}),2:COPY()'.format(method)).chain(
          createMasker('2:APPLY(1),1:COPY(),3:COPY()')))
 
 
