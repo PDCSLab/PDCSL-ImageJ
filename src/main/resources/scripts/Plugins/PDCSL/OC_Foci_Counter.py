@@ -28,6 +28,15 @@ fociMasker = createMasker('6:APPLY(1),6:APPLY(2),6:APPLY(3),6:APPLY(4),6:APPLY(5
 
 
 def process_image(image, channel_order):
+    
+    # Save the ROI, if any
+    roi = image.getRoi()
+    if roi:
+        inverseRoi = roi.getInverse(image)
+        # Remove the ROI from the original image
+        # (otherwise the masking operations won't work properly)
+        image.deleteRoi()
+    
     masks = volumeMasker.apply(image, "Masks - " + image.getTitle(), channel_order)
     foci = fociMasker.apply(masks, "Foci - " + image.getTitle())
     
@@ -48,10 +57,17 @@ def process_image(image, channel_order):
         area = 0
         
         for j in range(foci.getNSlices()):
-            foci.setZ(j + 1)            
+            foci.setZ(j + 1)
+            if roi:
+                # Apply the inverse ROI to only count the foci outside of the ROI
+                inverseRoi.setPosition(i + 1, j + 1, 1)
+                foci.setRoi(inverseRoi)            
             analyzer.analyze(foci)
             
             masks.setZ(j + 1)
+            if roi:
+                # Blacken out the original ROI so that it will not be included in the area
+                masks.getProcessor().fill(roi)
             masks.getProcessor().setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
             stats = ImageStatistics.getStatistics(masks.getProcessor(), ImageStatistics.LIMIT, masks.getCalibration())
             area += stats.area
