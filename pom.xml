@@ -8,7 +8,7 @@
 
   <name>PDCSL-ImageJ</name>
   <description>A collection of scripts from the PDCS Lab at the Barts Cancer Institute.</description>
-  <url>http://uk-chs-lgit01:8080/gitblit/summary/~gattat01!imagej.git</url>
+  <url>https://github.com/PDCSLab/PDCSL-ImageJ</url>
   <inceptionYear>2019</inceptionYear>
   <organization>
     <name>Barts Cancer Institute</name>
@@ -23,9 +23,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://uk-chs-lgit01/~gattat01/imagej.git</connection>
-    <developerConnection>scm:git:http://gattat01@uk-chs-lgit01:8080/gitblit/r/~gattat01/imagej.git </developerConnection>
-    <url>http://uk-chs-lgit01:8080/gitblit/summary/~gattat01!imagej.git</url>
+    <connection>scm:git:ssh://git@github.com/PDCSLab/PDCSL-ImageJ.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/PDCSLab/PDCSL-ImageJ.git</developerConnection>
+    <url>https://github.com/PDCSLab/PDCSLab-ImageJ.git</url>
     <tag>HEAD</tag>
   </scm>
 
