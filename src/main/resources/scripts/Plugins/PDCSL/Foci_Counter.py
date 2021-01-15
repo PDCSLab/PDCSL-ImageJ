@@ -3,6 +3,7 @@
 # @ Boolean(label='Project stack', value=false) project_stack
 # @ Float(label='Minimum size', value=3.0, min=0, max=500) minimum_size
 # @ Float(label='Maximum size', value=50.0, min=0, max=500) maximum_size
+# @ Boolean(label='Include ROI', value=false) include_roi
 #
 #
 # PDCSL-ImageJ - PDCS Lab’s ImageJ Collection
@@ -39,12 +40,12 @@ def threshold_processor(ip, method):
     return thresholded
 
 
-def process_image(image, method, project, min_size, max_size):
+def process_image(image, method, project, min_size, max_size, roi_in):
     current_channel = image.getC()
     
     # Save any existing ROI
     roi = image.getRoi()
-    if roi:
+    if roi and not roi_in:
         # The ROI is to be *excluded* from the analysis
         roi = roi.getInverse(image)
         
@@ -93,4 +94,4 @@ def process_image(image, method, project, min_size, max_size):
     results.show("Foci Counter Results")
 
 
-process_image(img, thresholding_method, project_stack, minimum_size, maximum_size)
+process_image(img, thresholding_method, project_stack, minimum_size, maximum_size, include_roi)
