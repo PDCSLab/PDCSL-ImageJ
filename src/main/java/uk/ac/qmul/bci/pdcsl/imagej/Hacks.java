@@ -3,7 +3,7 @@
  * Copyright © 2019 Damien Goutte-Gattat
  */
 
-package ac.uk.qmul.bci.pdcsl.imagej;
+package uk.ac.qmul.bci.pdcsl.imagej;
 
 import ij.IJ;
 import ij.ImagePlus;

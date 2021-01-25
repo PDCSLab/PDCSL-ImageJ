@@ -3,7 +3,7 @@
  * Copyright © 2021 Damien Goutte-Gattat
  */
 
-package ac.uk.qmul.bci.pdcsl.imagej;
+package uk.ac.qmul.bci.pdcsl.imagej;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;

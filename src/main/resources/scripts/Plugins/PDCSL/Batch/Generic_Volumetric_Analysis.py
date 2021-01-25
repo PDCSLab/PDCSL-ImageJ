@@ -10,7 +10,7 @@ from ij.measure import ResultsTable
 from org.incenp.imagej.ChannelMasker import applyMasker
 from org.incenp.imagej.Helper import extractVolumes
 from org.incenp.imagej import BatchReader
-from ac.uk.qmul.bci.pdcsl.imagej.Hacks import removeBlackSlices
+from uk.ac.qmul.bci.pdcsl.imagej.Hacks import removeBlackSlices
 
 def process_image(image, mask_command, results, savedir=None, remove_black_slices=False):
     masks = applyMasker(image, mask_command, image.getTitle(), None)
