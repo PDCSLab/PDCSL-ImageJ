@@ -11,13 +11,11 @@
 #
 # Foci_Counter: Count H2A.X foci
 
-from ij import IJ
-from ij.measure import ResultsTable
 from ij.plugin import ZProjector
-from ij.plugin.filter import ParticleAnalyzer
 
 from org.incenp.imagej.Helper import getResultsTable
 from org.incenp.imagej.ChannelMasker import createMasker
+from uk.ac.qmul.bci.pdcsl.imagej.Helper import countParticles
 
 
 def process_image(image, method, project, min_size, max_size, roi_in):
@@ -40,31 +38,21 @@ def process_image(image, method, project, min_size, max_size, roi_in):
     
     # Create the thresholded image
     masker = createMasker('{:d}:MASK({:s})'.format(current_channel, method))
-    thresholded_image = masker.apply(image, "Thresholded")
+    thresholded_image = masker.apply(image, "Foci Counter Threshold and Outline")
         
     # If the original image had a ROI, re-apply it
     if roi:
         thresholded_image.setRoi(roi)
     
     # Analyze the thresholded image
-    rt = ResultsTable()
-    analyzer = ParticleAnalyzer(ParticleAnalyzer.SHOW_OUTLINES, 0, rt, min_size, max_size, 0.0, 1.0)
-    analyzer.setHideOutputImage(True)
-    outline_image = IJ.createHyperStack("Outlines", image.getWidth(), image.getHeight(),
-                                        1, thresholded_image.getNSlices(), 1, 8)
-    for i in range(thresholded_image.getNSlices()):
-        thresholded_image.setZ(i + 1)
-        analyzer.analyze(thresholded_image)
-        outline_image.setZ(i + 1)
-        outline_image.setProcessor(analyzer.getOutputImage().getProcessor())
+    foci = countParticles(thresholded_image, min_size, max_size, [1], thresholded_image, 0)
         
     # Display the images and the results
     thresholded_image.show()
-    outline_image.show()
     results = getResultsTable("Foci Counter Results")
     results.incrementCounter()
     results.addValue("Image", image.getTitle())
-    results.addValue("Foci", rt.getCounter())
+    results.addValue("Foci", foci[0])
     results.show("Foci Counter Results")
 
 
