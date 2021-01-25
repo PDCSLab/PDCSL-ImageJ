@@ -11,33 +11,13 @@
 #
 # Foci_Counter: Count H2A.X foci
 
-from ij import IJ, ImagePlus
+from ij import IJ
 from ij.measure import ResultsTable
 from ij.plugin import ZProjector
 from ij.plugin.filter import ParticleAnalyzer
-from ij.process import AutoThresholder, ImageProcessor
 
 from org.incenp.imagej.Helper import getResultsTable
-
-def threshold_processor(ip, method):
-    # Get threshold: use specified algorithm or pre-set threshold levels
-    if isinstance(method, basestring):
-        min_threshold = AutoThresholder().getThreshold(method, ip.getHistogram())
-        max_threshold = 255
-    else:
-        min_threshold, max_threshold = method
-        
-    # Create thresholded image
-    ip.setThreshold(min_threshold, max_threshold, ImageProcessor.NO_LUT_UPDATE)
-    thresholded = ip.createMask()
-    
-    # Do a close-open cycle to smooth the mask
-    thresholded.dilate(1, 0)
-    thresholded.erode(1, 0)
-    thresholded.erode(1, 0)
-    thresholded.dilate(1, 0)
-    
-    return thresholded
+from org.incenp.imagej.ChannelMasker import createMasker
 
 
 def process_image(image, method, project, min_size, max_size, roi_in):
@@ -52,21 +32,15 @@ def process_image(image, method, project, min_size, max_size, roi_in):
     if method == 'preset':
         # Get pre-defined threshold
         min_threshold = image.getProcessor().getMinThreshold()
-        max_threshold = image.getProcessor().getMaxThreshold()
-        method = (min_threshold, max_threshold)
+        method = 'FIXED,{:.0f}'.format(min_threshold)
     
     # Project the image?
     if image.getNSlices() > 1 and project:
         image = ZProjector.run(image, 'max')
-        
-    # Create thresholded image
-    thresholded_image = IJ.createHyperStack("Thresholded", image.getWidth(), image.getHeight(),
-                                            1, image.getNSlices(), 1, 8)        
-    for i in range(image.getNSlices()):
-        image.setC(current_channel)
-        image.setZ(i + 1)
-        thresholded_image.setZ(i + 1)
-        thresholded_image.setProcessor(threshold_processor(image.getProcessor(), method))
+    
+    # Create the thresholded image
+    masker = createMasker('{:d}:MASK({:s})'.format(current_channel, method))
+    thresholded_image = masker.apply(image, "Thresholded")
         
     # If the original image had a ROI, re-apply it
     if roi:
