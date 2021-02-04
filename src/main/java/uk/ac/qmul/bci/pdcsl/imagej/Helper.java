@@ -5,9 +5,14 @@
 
 package uk.ac.qmul.bci.pdcsl.imagej;
 
+import org.incenp.imagej.BinaryOperator;
+import org.incenp.imagej.Masking;
+
+import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.ParticleAnalyzer;
+import ij.process.ImageProcessor;
 
 /**
  * A class of static helper methods.
@@ -88,5 +93,50 @@ public class Helper {
      */
     public static int[] countParticles(ImagePlus image, double minSize, double maxSize, int[] channels) {
         return countParticles(image, minSize, maxSize, channels, null, 0);
+    }
+
+    /**
+     * Apply masks found in an image. This method assumes a source hyperstack
+     * containing binary masks in all its channels except the last one. It produces
+     * a new hyperstack where all masks have been applied to the last channel.
+     * 
+     * @param image the source hyperstack
+     * @param title the title of the new hyperstack
+     * @return the resulting hyperstack
+     */
+    public static ImagePlus applyMasks(ImagePlus image, String title) {
+        int nchannels = image.getNChannels();
+        int nslices = image.getNSlices();
+        int nframes = image.getNFrames();
+        ImagePlus masked = IJ.createHyperStack(title, image.getWidth(), image.getHeight(), nchannels - 1, nslices,
+                nframes, 8);
+
+        for ( int i = 0; i < nchannels - 1; i++ ) {
+            for ( int j = 0; j < nslices; j++ ) {
+                for ( int k = 0; k < nframes; k++ ) {
+                    image.setPositionWithoutUpdate(nchannels, j + 1, k + 1);
+                    ImageProcessor src = image.getProcessor().duplicate();
+                    image.setPositionWithoutUpdate(i + 1, j + 1, k + 1);
+                    masked.setPositionWithoutUpdate(i + 1, j + 1, k + 1);
+
+                    masked.setProcessor(
+                            Masking.applyMask(src, image.getProcessor(), BinaryOperator.AND, Masking.NO_DUPLICATE));
+                }
+            }
+        }
+
+        return masked;
+    }
+
+    /**
+     * Apply masks found in an image. This method is similar
+     * {@link #applyMasks(ImagePlus, String)} but gives the resulting image a
+     * default title.
+     * 
+     * @param image the source hyperstack
+     * @return the resulting hyperstack
+     */
+    public static ImagePlus applyMasks(ImagePlus image) {
+        return applyMasks(image, image.getTitle() + " Masked");
     }
 }
