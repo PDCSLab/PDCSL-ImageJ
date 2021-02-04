@@ -30,14 +30,18 @@ def process_image(image, method, project, min_size, max_size, roi_in):
     if method == 'preset':
         # Get pre-defined threshold
         min_threshold = image.getProcessor().getMinThreshold()
-        method = 'FIXED,{:.0f}'.format(min_threshold)
+        method = 'MASK(FIXED,{:.0f})'.format(min_threshold)
+    elif method == 'none':
+        method = 'COPY()'
+    else:
+        method = 'MASK({:s})'.format(method)
     
     # Project the image?
     if image.getNSlices() > 1 and project:
         image = ZProjector.run(image, 'max')
     
     # Create the thresholded image
-    masker = createMasker('{:d}:MASK({:s})'.format(current_channel, method))
+    masker = createMasker('{:d}:{:s}'.format(current_channel, method))
     thresholded_image = masker.apply(image, "Foci Counter Threshold and Outline")
         
     # If the original image had a ROI, re-apply it
