@@ -31,21 +31,26 @@ public class OncoChrome {
      * <li>an untouched copy of the non-OncoChrome channel, if any.
      * </ul>
      * 
-     * @param source       the source hyperstack
-     * @param channelOrder the channel order specification, where 'C' is mTurquoise,
-     *                     'G' is GFP, 'Y' is Citrine, 'R' is mCherry, and 'F' is
-     *                     any far-red channel
-     * @param withExtra    if @c true, generates 'all OncoChrome' and 'no
-     *                     OncoChrome' masks
+     * @param source         the source hyperstack
+     * @param channelOrder   the channel order specification, where 'C' is
+     *                       mTurquoise, 'G' is GFP, 'Y' is Citrine, 'R' is mCherry,
+     *                       and 'F' is any far-red channel
+     * @param withExtra      if @c true, generates 'all OncoChrome' and 'no
+     *                       OncoChrome' masks
+     * @param nonOCThreshold the thresholding method to optionally apply to the
+     *                       non-OncoChrome channel (if @c null, no thresholding
+     *                       will be applied and the non-OncoChrome channel will be
+     *                       copied as is)
      * @return the resulting masked image
      */
-    public static ImagePlus createMask(ImagePlus source, String channelOrder, boolean withExtra) {
+    public static ImagePlus createMask(ImagePlus source, String channelOrder, boolean withExtra,
+            String nonOCThreshold) {
         boolean withNonOCData = source.getNChannels() == 5;
 
         /* Create the initial masks. */
         String maskCommand = "G:MASK(Huang),C:MASK(Moments),G:MASK(Moments),Y:MASK(Moments),R:MASK(MaxEntropy)";
         if ( withNonOCData ) { /* Include the non-OncoChrome channel. */
-            maskCommand += ",F:COPY()";
+            maskCommand += nonOCThreshold != null ? String.format(",F:MASK(%s)", nonOCThreshold) : ",F:COPY()";
         }
         ChannelMasker masker = ChannelMasker.createMasker(maskCommand, channelOrder);
 
