@@ -21,6 +21,9 @@ public class OCMasker implements Command {
     @Parameter(label = "Order of channels:")
     private String channelOrder;
 
+    @Parameter(label = "Compute extra masks:")
+    private boolean withExtraMasks;
+
     @Parameter(label = "Apply the masks:")
     private boolean applyMasks;
 
@@ -29,7 +32,7 @@ public class OCMasker implements Command {
 
     @Override
     public void run() {
-        ImagePlus masks = OncoChrome.createMask(image, channelOrder, true);
+        ImagePlus masks = OncoChrome.createMask(image, channelOrder, withExtraMasks);
         uiService.show(masks);
 
         if ( applyMasks ) {
