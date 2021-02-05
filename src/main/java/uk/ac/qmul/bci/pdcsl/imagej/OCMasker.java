@@ -24,8 +24,8 @@ public class OCMasker implements Command {
     @Parameter(label = "Thresholding algorithm for non-OC channel", required = false)
     private String nonOCThreshold;
 
-    @Parameter(label = "Compute extra masks:")
-    private boolean withExtraMasks;
+    @Parameter(label = "Compute control mask:")
+    private boolean withControlMask;
 
     @Parameter(label = "Apply the masks:")
     private boolean applyMasks;
@@ -35,7 +35,7 @@ public class OCMasker implements Command {
 
     @Override
     public void run() {
-        ImagePlus masks = OncoChrome.createMask(image, channelOrder, withExtraMasks,
+        ImagePlus masks = OncoChrome.createMask(image, channelOrder, withControlMask,
                 nonOCThreshold.isEmpty() ? null : nonOCThreshold);
         uiService.show(masks);
 

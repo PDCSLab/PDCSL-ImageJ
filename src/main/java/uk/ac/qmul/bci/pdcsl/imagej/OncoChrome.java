@@ -21,13 +21,12 @@ public class OncoChrome {
      * The resulting image will containing the following channels:
      * <ul>
      * <li>a mask of the entire brain (as obtained my wide thresholding of GFP);
-     * <li>a mask of all OncoChrome fluorophores together (if @c withExtra is @c
-     * true);
-     * <li>the complement of the previous mask (if @c withExtra is @c true);
      * <li>a mask of the mTurquoise signal;
      * <li>a mask of the GFP signal;
      * <li>a mask of the Citrine signal;
      * <li>a mask of the mCherry signal;
+     * <li>a mask of the non-OncoChrome-expressing part of the brain (if @c
+     * withControl is @c true);
      * <li>an untouched copy of the non-OncoChrome channel, if any.
      * </ul>
      * 
@@ -35,15 +34,15 @@ public class OncoChrome {
      * @param channelOrder   the channel order specification, where 'C' is
      *                       mTurquoise, 'G' is GFP, 'Y' is Citrine, 'R' is mCherry,
      *                       and 'F' is any far-red channel
-     * @param withExtra      if @c true, generates 'all OncoChrome' and 'no
-     *                       OncoChrome' masks
+     * @param withControl    if @c true, generates the control mask (excluding all
+     *                       OncoChrome fluorophores)
      * @param nonOCThreshold the thresholding method to optionally apply to the
      *                       non-OncoChrome channel (if @c null, no thresholding
      *                       will be applied and the non-OncoChrome channel will be
      *                       copied as is)
      * @return the resulting masked image
      */
-    public static ImagePlus createMask(ImagePlus source, String channelOrder, boolean withExtra,
+    public static ImagePlus createMask(ImagePlus source, String channelOrder, boolean withControl,
             String nonOCThreshold) {
         boolean withNonOCData = source.getNChannels() == 5;
 
@@ -54,16 +53,12 @@ public class OncoChrome {
         }
         ChannelMasker masker = ChannelMasker.createMasker(maskCommand, channelOrder);
 
-        if ( withExtra ) {
-            /* Create a combined mask of all OncoChrome channels (2nd channel). */
-            String step2 = "1:COPY(),2:APPLY(3,4,5,OR),2:COPY(),3:COPY(),4:COPY(),5:COPY()";
+        if ( withControl ) {
+            /* Create a combined mask of all OncoChrome channels (last channel). */
+            String step2 = "1:COPY(),2:COPY(),3:COPY(),4:COPY(),5:COPY(),2:APPLY(3,4,5,OR)";
 
-            /*
-             * Apply that mask to the entire brain mask, first to get only the part of the
-             * brain expressing the OncoChrome (2nd channel), then to get the complement
-             * part (3rd channel).
-             */
-            String step3 = "1:COPY(),1:APPLY(2,AND),1:APPLY(2,XOR),3:COPY(),4:COPY(),5:COPY(),6:COPY()";
+            /* Apply that mask to the entire brain mask. */
+            String step3 = "1:COPY(),2:COPY(),3:COPY(),4:COPY(),5:COPY(),1:APPLY(6,XOR)";
             if ( withNonOCData ) { /* Include the non-OncoChrome channel. */
                 step2 += ",6:COPY()";
                 step3 += ",7:COPY()";
