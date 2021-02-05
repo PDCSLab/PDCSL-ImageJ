@@ -15,7 +15,7 @@ from ij.plugin import ZProjector
 
 from org.incenp.imagej.Helper import getResultsTable
 from org.incenp.imagej.ChannelMasker import createMasker
-from uk.ac.qmul.bci.pdcsl.imagej.Helper import countParticles
+from uk.ac.qmul.bci.pdcsl.imagej.Util import countParticles
 
 
 def process_image(image, method, project, min_size, max_size, roi_in):

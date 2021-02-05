@@ -40,7 +40,7 @@ public class OCMasker implements Command {
         uiService.show(masks);
 
         if ( applyMasks ) {
-            ImagePlus masked = Helper.applyMasks(masks, image.getTitle() + " Masked");
+            ImagePlus masked = Util.applyMasks(masks, image.getTitle() + " Masked");
             uiService.show(masked);
         }
     }

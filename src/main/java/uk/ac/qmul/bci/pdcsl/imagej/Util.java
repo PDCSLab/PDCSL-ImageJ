@@ -6,6 +6,7 @@
 package uk.ac.qmul.bci.pdcsl.imagej;
 
 import org.incenp.imagej.BinaryOperator;
+import org.incenp.imagej.Helper;
 import org.incenp.imagej.Masking;
 
 import ij.IJ;
@@ -17,7 +18,7 @@ import ij.process.ImageProcessor;
 /**
  * A class of static helper methods.
  */
-public class Helper {
+public class Util {
 
     /**
      * Counts particles in all slices in the specified channels of an image. Given a
@@ -56,7 +57,7 @@ public class Helper {
 
         if ( output == image ) {
             outputChannelOffset = image.getNChannels() + 1;
-            org.incenp.imagej.Helper.augmentHyperstack(image, channels.length);
+            Helper.augmentHyperstack(image, channels.length);
         }
 
         for ( int i = 0; i < channels.length; i++ ) {
@@ -138,5 +139,47 @@ public class Helper {
      */
     public static ImagePlus applyMasks(ImagePlus image) {
         return applyMasks(image, image.getTitle() + " Masked");
+    }
+
+    /**
+     * Parse a string into a list of channel indexes. The string can contain space-,
+     * comma-, or semicolon-separated channel indexes, the keyword "current" (or
+     * "selected") to indicate the currently selected channel, or the keyword "all"
+     * to indicate all channels in the image. An empty string (or @c null) is
+     * treated the same as the "current" keyword.
+     * 
+     * @param image the image the channel indexes refer to
+     * @param spec  the string to parse
+     * @return the list of channel indexes
+     */
+    public static int[] parseChannels(ImagePlus image, String spec) {
+        int nSourceChannels = image.getNChannels();
+        int channels[];
+
+        if ( spec == null || spec.isEmpty() || spec.equalsIgnoreCase("current") || spec.equalsIgnoreCase("selected") ) {
+            channels = new int[1];
+            channels[0] = image.getC();
+        } else if ( spec.equalsIgnoreCase("all") ) {
+            channels = new int[nSourceChannels];
+            for ( int i = 0; i < nSourceChannels; i++ ) {
+                channels[i] = i + 1;
+            }
+        } else {
+            String tokens[] = spec.split(" +|, *|; *");
+            channels = new int[tokens.length];
+            for ( int i = 0; i < tokens.length; i++ ) {
+                try {
+                    channels[i] = Integer.parseInt(tokens[i]);
+                } catch ( NumberFormatException nfe ) {
+                    throw new IllegalArgumentException(String.format("Invalid channel specification: %s", tokens[i]));
+                }
+
+                if ( channels[i] < 1 || channels[i] > nSourceChannels ) {
+                    throw new IllegalArgumentException(String.format("Channel index out of scope: %d", channels[i]));
+                }
+            }
+        }
+
+        return channels;
     }
 }

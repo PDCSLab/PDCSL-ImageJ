@@ -19,29 +19,12 @@ public class VolumeCounter implements Command {
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "Channels to process (comma-separated):", required = false)
+    @Parameter(label = "Channels to process:", required = false)
     private String channels;
 
     @Override
     public void run() {
-        double[] volumes;
-
-        if ( channels.isEmpty() ) {
-            volumes = Helper.extractVolumes(image);
-        } else {
-            String[] channelSpecs = channels.split(",");
-            int[] channelIndexes = new int[channelSpecs.length];
-
-            for ( int i = 0; i < channelSpecs.length; i++ ) {
-                try {
-                    channelIndexes[i] = Integer.parseInt(channelSpecs[i]);
-                } catch ( NumberFormatException nfe ) {
-                    throw new IllegalArgumentException(
-                            String.format("Invalid channels specification:", channelSpecs[i]));
-                }
-            }
-            volumes = Helper.extractVolumes(image, channelIndexes);
-        }
+        double[] volumes = Helper.extractVolumes(image, Util.parseChannels(image, channels));
 
         ResultsTable rt = Helper.getResultsTable("Volume Counter");
         rt.incrementCounter();
