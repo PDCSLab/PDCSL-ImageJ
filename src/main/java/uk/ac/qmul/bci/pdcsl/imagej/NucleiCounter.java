@@ -22,8 +22,8 @@ public class NucleiCounter implements Command {
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "Process all channels?")
-    private boolean allChannels;
+    @Parameter(label = "Channel(s) to process", required = false)
+    private String channelList;
 
     @Parameter(label = "Show the segmented image?")
     private boolean showSegmentedImage;
@@ -37,16 +37,7 @@ public class NucleiCounter implements Command {
         ResultsTable rt = new ResultsTable();
         ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.DISPLAY_SUMMARY, 0, rt, 0.0, 500.0, 0.0, 1.0);
 
-        int[] channels;
-        if ( allChannels ) {
-            channels = new int[image.getNChannels()];
-            for ( int i = 0; i < image.getNChannels(); i++ )
-                channels[i] = i + 1;
-        } else {
-            channels = new int[1];
-            channels[0] = image.getC();
-        }
-
+        int[] channels = Util.parseChannels(image, channelList);
         ImagePlus segmented = ns.segment(image, channels);
 
         ResultsTable rt2 = Helper.getResultsTable("Nuclei Counter");
