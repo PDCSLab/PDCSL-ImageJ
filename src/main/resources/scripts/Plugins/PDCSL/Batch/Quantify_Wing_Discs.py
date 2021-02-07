@@ -58,7 +58,7 @@ def run_script():
 
     while batch.next():
         img = batch.getImage()
-        process_image(img, batch.getCell(1), results, savedir=savedir)
+        process_image(img, batch.getCell("Channel Order"), results, savedir=savedir)
         results.show("Wing Disc Signal")
 
         img.close()
