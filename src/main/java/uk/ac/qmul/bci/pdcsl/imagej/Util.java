@@ -115,10 +115,10 @@ public class Util {
         for ( int i = 0; i < nchannels - 1; i++ ) {
             for ( int j = 0; j < nslices; j++ ) {
                 for ( int k = 0; k < nframes; k++ ) {
-                    image.setPositionWithoutUpdate(nchannels, j + 1, k + 1);
+                    image.setPosition(nchannels, j + 1, k + 1);
                     ImageProcessor src = image.getProcessor().duplicate();
-                    image.setPositionWithoutUpdate(i + 1, j + 1, k + 1);
-                    masked.setPositionWithoutUpdate(i + 1, j + 1, k + 1);
+                    image.setPosition(i + 1, j + 1, k + 1);
+                    masked.setPosition(i + 1, j + 1, k + 1);
 
                     masked.setProcessor(
                             Masking.applyMask(src, image.getProcessor(), BinaryOperator.AND, Masking.NO_DUPLICATE));
