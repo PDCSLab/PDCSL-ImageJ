@@ -38,7 +38,7 @@ def run_script():
         batch.fillResultsTable(results)
         process_image(img, batch.getCell('MaskCommand'), results, savedir=savedir, remove_black_slices=exclude_blacks)
         img.close()
-        results.show("Generic Volumetric Analysis Results")
+        results.show("Batch Volume Counter Results")
         
         
 run_script()
