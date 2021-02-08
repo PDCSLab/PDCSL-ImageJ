@@ -12,13 +12,13 @@ Scripts & Plugins
 Once installed (see next section), scripts and plugins in this package
 will be available from ImageJ’s `Plugins>PDCSL` menu.
 
-* `Foci Counter`: Intended for counting counting ɣH2A.X foci.
+* `Foci Counter`: Intended for counting ɣH2A.X (or similar) foci.
 
 * `Nuclei Counter`: Intended for counting cell nuclei in fly tissues.
 
-* `OC Masker`: Create masks for OncoChrome-positive regions.
+* `Volume Counter`: Compute volumes from binary stacks.
 
-* `OC Volume Counter`: Extract volume of OncoChrome-positive regions.
+* `OC Masker`: Create masks for OncoChrome-positive regions.
 
 
 Batch Scripts
@@ -28,14 +28,14 @@ Scripts intended to be run on a lot of images in batch mode (instead of
 a single, already opened image) will be available in the
 `Plugins>PDCSL>Batch` menu.
 
-* `Generic Volumetric Analysis`: Extract the volumes of regions
-  resulting from applying user-defined masks.
+* `Batch Volume Counter`: Extract the volumes of regions resulting from
+  applying user-defined masks.
+
+* `Batch Foci Counter`: Count foci in regions defined by a user-defined
+  mask.
   
-* `OC Repo Counter`: Extract the number of Repo-positive nuclei in
-  OncoChrome-positive regions.
-  
-* `OC Volumetric Analysis`: Extract volume of OncoChrome-positive
-  regions.
+* `Batch OC Counter`: Extract volumes from OncoChrome-positive regions,
+  and optionally count foci or nuclei in those regions.
   
 * `Quantify Wing Discs`: Intended to quantify fluorescence signal in
   anterior and posterior compartments of fly wing discs.
