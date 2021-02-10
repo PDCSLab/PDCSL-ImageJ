@@ -1,6 +1,6 @@
 # @ ImagePlus img
 # @ String(label='Thresholding method', value='MaxEntropy') thresholding_method
-# @ String(label='Channels', value='selected') channel_list
+# @ String(label='Channel(s) to process', value='selected') channel_list
 # @ Boolean(label='Project stack', value=false) project_stack
 # @ Float(label='Minimum size', value=3.0, min=0, max=500) minimum_size
 # @ Float(label='Maximum size', value=50.0, min=0, max=500) maximum_size

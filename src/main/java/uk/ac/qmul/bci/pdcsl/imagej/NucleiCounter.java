@@ -25,7 +25,7 @@ public class NucleiCounter implements Command {
     @Parameter(label = "Channel(s) to process", required = false)
     private String channelList;
 
-    @Parameter(label = "Show the segmented image?")
+    @Parameter(label = "Show the segmented image")
     private boolean showSegmentedImage;
 
     @Parameter

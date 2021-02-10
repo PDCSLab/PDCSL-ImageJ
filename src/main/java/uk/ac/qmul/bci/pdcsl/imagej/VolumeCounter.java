@@ -19,7 +19,7 @@ public class VolumeCounter implements Command {
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "Channels to process:", required = false)
+    @Parameter(label = "Channels to process", required = false)
     private String channels;
 
     @Override

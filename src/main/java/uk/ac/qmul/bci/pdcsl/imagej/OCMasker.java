@@ -18,16 +18,16 @@ public class OCMasker implements Command {
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "Order of channels:")
+    @Parameter(label = "Order of channels")
     private String channelOrder;
 
     @Parameter(label = "Thresholding algorithm for non-OC channel", required = false)
     private String nonOCThreshold;
 
-    @Parameter(label = "Compute control mask:")
+    @Parameter(label = "Compute control mask")
     private boolean withControlMask;
 
-    @Parameter(label = "Apply the masks:")
+    @Parameter(label = "Apply the masks")
     private boolean applyMasks;
 
     @Parameter
