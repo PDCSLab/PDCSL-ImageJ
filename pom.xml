@@ -35,36 +35,11 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.incenp.imagej</groupId>
-      <artifactId>incenp-plugins</artifactId>
-      <version>0.9.3</version>
+      <groupId>org.incenp</groupId>
+      <artifactId>incenp-imagej-plugins</artifactId>
+      <version>0.9.4</version>
     </dependency>
   </dependencies>
-
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>incenp-mvn</id>
-      <name>Incenp.org Repository</name>
-      <url>https://mvn.incenp.org/repo/releases</url>
-    </repository>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>incenp-mvn-snap</id>
-      <name>Incenp.org Snapshots Repository</name>
-      <url>https://mvn.incenp.org/repo/snapshots</url>
-    </repository>
-  </repositories>
   
   <build>
     <plugins>
