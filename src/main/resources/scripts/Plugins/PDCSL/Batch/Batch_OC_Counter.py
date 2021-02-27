@@ -56,11 +56,11 @@ def process_image(image, order, process_fr_channel, fr_threshold, sizes, results
         masked = Util.applyMasks(masks, image.getTitle() + " Masked")
         if fr_threshold == 'nuclei':
             segmenter = NucleiSegmenter(2.0)
-            masked = segmenter.segment(masked, [1, 2, 3, 4, 5])
+            masked = segmenter.segment(masked, [1, 2, 3, 4, 5, 6])
         save_image(masked, savedir)
             
-        foci = Util.countParticles(masked, sizes[0], sizes[1], [1, 2, 3, 4, 5], masked, 0)
-        for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry"]):
+        foci = Util.countParticles(masked, sizes[0], sizes[1], [1, 2, 3, 4, 5, 6], masked, 0)
+        for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry", "Control"]):
             results.addValue("Foc_{}".format(label), foci[i])
             
         masked.close()
