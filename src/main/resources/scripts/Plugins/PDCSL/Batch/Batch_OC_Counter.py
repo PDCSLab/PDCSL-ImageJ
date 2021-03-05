@@ -2,6 +2,8 @@
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 # @ Boolean (label='Analyse non-OC channel', value=false) process_non_oc_channel
 # @ String (label='Threshold for non-OC channel', value='MaxEntropy') non_oc_threshold
+# @ Integer (label='Subtract background radius', value=50, min=0) subtract_radius
+# @ Integer (label='Blur radius', value=2, min=0) blur_radius
 # @ Float (label='Minimum size', value=3.0, min=0, max=500) minimum_size
 # @ Float (label='Maximum size', value=50.0, min=0, max=500) maximum_size
 #
@@ -26,6 +28,7 @@ import os
 
 from ij import IJ
 from ij.measure import ResultsTable
+from ij.plugin.filter import GaussianBlur
 
 from org.incenp.imagej import BatchReader
 from org.incenp.imagej import Helper
@@ -40,10 +43,15 @@ def save_image(image, savedir):
         IJ.saveAsTiff(image, outname)
 
 
-def process_image(image, order, process_fr_channel, fr_threshold, sizes, results, savedir):
+def process_image(image, order, process_fr_channel, fr_threshold, sizes, results, savedir, subtract, blur):
     extra_threshold = None
     if process_fr_channel and fr_threshold != 'nuclei':
         extra_threshold = fr_threshold
+        
+    if subtract != 0:
+        IJ.run(image, "Subtract Background...", "rolling={:d} disable stack".format(subtract))
+    if blur != 0:
+        IJ.run(image, "Gaussian Blur...", "sigma={:d} stack".format(blur))
                     
     masks = OncoChrome.createMask(image, order, True, extra_threshold)
     save_image(masks, savedir)
@@ -79,7 +87,7 @@ def run_script():
         # Sanity check: don't try to process image with not enough channels
         if ( process_non_oc_channel and img.getNChannels() >= 5 ) or ( not process_non_oc_channel and img.getNChannels() >= 4 ):
             batch.fillResultsTable(results)
-            process_image(img, batch.getCell("Channel Order"), process_non_oc_channel, non_oc_threshold, (minimum_size, maximum_size), results, savedir)
+            process_image(img, batch.getCell("Channel Order"), process_non_oc_channel, non_oc_threshold, (minimum_size, maximum_size), results, savedir, subtract_radius, blur_radius)
             results.show("Batch OC Counter Results")
         img.close()        
 
