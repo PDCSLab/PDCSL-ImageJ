@@ -63,6 +63,7 @@ public class Util {
         int[] particles = new int[channels.length];
         int nslices = image.getNSlices();
         int options = output != null ? ParticleAnalyzer.SHOW_OUTLINES : 0;
+        int maxThreshold = (1 << image.getBitDepth()) - 1;
 
         ResultsTable results = new ResultsTable();
         ParticleAnalyzer analyzer = new ParticleAnalyzer(options, 0, results, minSize, maxSize, 0.0, 1.0);
@@ -76,6 +77,7 @@ public class Util {
         for ( int i = 0; i < channels.length; i++ ) {
             for ( int j = 0; j < nslices; j++ ) {
                 image.setPosition(channels[i], j + 1, 1);
+                image.getProcessor().setThreshold(1, maxThreshold, ImageProcessor.NO_LUT_UPDATE);
                 analyzer.analyze(image);
 
                 if ( output != null ) {
