@@ -37,7 +37,7 @@
     <dependency>
       <groupId>org.incenp</groupId>
       <artifactId>incenp-imagej-plugins</artifactId>
-      <version>0.9.4</version>
+      <version>0.9.5</version>
     </dependency>
   </dependencies>
   
