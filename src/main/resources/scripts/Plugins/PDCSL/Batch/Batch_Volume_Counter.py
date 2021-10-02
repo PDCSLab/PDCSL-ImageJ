@@ -29,8 +29,8 @@ from org.incenp.imagej.Helper import extractVolumes
 from org.incenp.imagej import BatchReader
 from uk.ac.qmul.bci.pdcsl.imagej.Hacks import removeBlackSlices
 
-def process_image(image, mask_command, results, savedir=None, remove_black_slices=False):
-    masks = applyMasker(image, mask_command, image.getTitle(), None)
+def process_image(image, mask_command, results, savedir=None, remove_black_slices=False, order=None):
+    masks = applyMasker(image, mask_command, image.getTitle(), order)
     if remove_black_slices:
         masks = removeBlackSlices(masks)
     volumes = extractVolumes(masks)
@@ -53,7 +53,10 @@ def run_script():
     while batch.next():
         img = batch.getImage()
         batch.fillResultsTable(results)
-        process_image(img, batch.getCell('MaskCommand'), results, savedir=savedir, remove_black_slices=exclude_blacks)
+        order = batch.getCell("Channel Order")
+        if order == "":
+            order = None
+        process_image(img, batch.getCell('MaskCommand'), results, savedir=savedir, remove_black_slices=exclude_blacks, order=order)
         img.close()
         results.show("Batch Volume Counter Results")
         
