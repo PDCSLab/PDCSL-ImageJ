@@ -43,32 +43,31 @@ def save_image(image, savedir):
         IJ.saveAsTiff(image, outname)
 
 
-def process_image(image, order, process_fr_channel, fr_threshold, sizes, results, savedir, subtract, blur):
-    extra_threshold = None
-    if process_fr_channel and fr_threshold != 'nuclei':
-        extra_threshold = fr_threshold
-        
+def process_image(image, order, oncochrome, process_fr_channel, fr_threshold, sizes, results, savedir, subtract, blur):
+    channelNames = oncochrome.getChannelNames()
+    channelNumbers = range(1, oncochrome.getNChannels() + 1)
+    
     if subtract != 0:
         IJ.run(image, "Subtract Background...", "rolling={:d} disable stack".format(subtract))
     if blur != 0:
         IJ.run(image, "Gaussian Blur...", "sigma={:d} stack".format(blur))
                     
-    masks = OncoChrome.createMask(image, order, True, extra_threshold)
+    masks = oncochrome.getMasker().apply(image, image.getTitle() + " Masks", order)
     save_image(masks, savedir)
     
-    volumes = Helper.extractVolumes(masks, [1, 2, 3, 4, 5, 6])
-    for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry", "Control"]):
+    volumes = Helper.extractVolumes(masks, channelNumbers)
+    for i, label in enumerate(channelNames):
         results.addValue("Vol_{}".format(label), volumes[i])
     
     if process_fr_channel:
         masked = Util.applyMasks(masks, image.getTitle() + " Masked")
         if fr_threshold == 'nuclei':
             segmenter = NucleiSegmenter(2.0)
-            masked = segmenter.segment(masked, [1, 2, 3, 4, 5, 6])
+            masked = segmenter.segment(masked, channelNumbers)
         save_image(masked, savedir)
             
-        foci = Util.countParticles(masked, sizes[0], sizes[1], [1, 2, 3, 4, 5, 6], masked, 0)
-        for i, label in enumerate(["Total", "mTurquoise", "GFP", "Citrine", "mCherry", "Control"]):
+        foci = Util.countParticles(masked, sizes[0], sizes[1], channelNumbers, masked, 0)
+        for i, label in enumerate(channelNames):
             results.addValue("Foc_{}".format(label), foci[i])
             
         masked.close()
@@ -81,13 +80,21 @@ def run_script():
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
     
+    oncochrome = OncoChrome.getOncoChrome("brainv1");
+    oncochrome.setControlMask(True)
+    if process_non_oc_channel:
+        if non_oc_threshold == 'nuclei':
+            oncochrome.setExtraChannel('F', None)
+        else:
+            oncochrome.setExtraChannel('F', non_oc_threshold)
+    
     batch = BatchReader(pathname)
     while batch.next():
         img = batch.getImage()
         # Sanity check: don't try to process image with not enough channels
-        if ( process_non_oc_channel and img.getNChannels() >= 5 ) or ( not process_non_oc_channel and img.getNChannels() >= 4 ):
+        if ( oncochrome.checkImage(img) ):
             batch.fillResultsTable(results)
-            process_image(img, batch.getCell("Channel Order"), process_non_oc_channel, non_oc_threshold, (minimum_size, maximum_size), results, savedir, subtract_radius, blur_radius)
+            process_image(img, batch.getCell("Channel Order"), oncochrome, process_non_oc_channel, non_oc_threshold, (minimum_size, maximum_size), results, savedir, subtract_radius, blur_radius)
             results.show("Batch OC Counter Results")
         img.close()        
 
