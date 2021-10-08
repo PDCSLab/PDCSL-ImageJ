@@ -31,10 +31,13 @@ public class OCMasker implements Command {
     @Parameter
     private ImagePlus image;
 
+    @Parameter(label = "OncoChrome setup", choices = { "brainv1" })
+    private String oncoChromeSetup;
+
     @Parameter(label = "Order of channels")
     private String channelOrder;
 
-    @Parameter(label = "Thresholding algorithm for non-OC channel", required = false)
+    @Parameter(label = "Thresholding algorithm for non-OC channel ('F')", required = false)
     private String nonOCThreshold;
 
     @Parameter(label = "Compute control mask")
@@ -48,8 +51,14 @@ public class OCMasker implements Command {
 
     @Override
     public void run() {
-        ImagePlus masks = OncoChrome.createMask(image, channelOrder, withControlMask,
-                nonOCThreshold.isEmpty() ? null : nonOCThreshold);
+        OncoChrome oncoChrome = OncoChrome.getOncoChrome(oncoChromeSetup);
+        oncoChrome.setControlMask(withControlMask);
+
+        if ( image.getNChannels() > oncoChrome.getNSourceChannels() ) {
+            oncoChrome.setExtraChannel('F', nonOCThreshold);
+        }
+
+        ImagePlus masks = oncoChrome.getMasker().apply(image, image.getTitle() + " Masks", channelOrder);
         uiService.show(masks);
 
         if ( applyMasks ) {

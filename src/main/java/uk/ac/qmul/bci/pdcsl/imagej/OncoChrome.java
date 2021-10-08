@@ -122,6 +122,16 @@ public class OncoChrome {
     }
 
     /**
+     * Gets the number of source channels. This is the number of channels an image
+     * is expected to have (at least) to be compatible with this OncoChrome setup.
+     * 
+     * @return the number of source channels
+     */
+    public int getNSourceChannels() {
+        return nSourceChannels;
+    }
+
+    /**
      * Checks whether an image is compatible with this OncoChrome object. An image
      * is deemed compatible if it contains enough channels (at least one for each
      * OncoChrome fluorophore and optionally one for the extra channel).
