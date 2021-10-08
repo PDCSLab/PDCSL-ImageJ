@@ -56,10 +56,13 @@ public class OncoChrome {
      * 
      * @param code one-letter code identifying the extra channel
      * @param mask thresholding algorithm to use for that channel when creating a
-     *             mask (may be null, in which case the channel will be simply
-     *             copied over)
+     *             mask (may be null or an empty string, in which case the channel
+     *             will be simply copied over)
      */
     public void setExtraChannel(char code, String mask) {
+        if ( mask != null && mask.isEmpty() ) {
+            mask = null;
+        }
         extraChannel = new Channel(code, "Extra", mask);
         masker = null;
     }
