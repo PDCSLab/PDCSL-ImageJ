@@ -3,9 +3,9 @@
 # @ Boolean (label='Create control mask', value=false, persist=false) with_control
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 # @ String (visibility=MESSAGE, value="Extra channel settings") msg1
-# @ Boolean (label='Analyse non-OC channel', value=false) process_non_oc_channel
-# @ String (label='Channel code for non-OC channel', value='F') non_oc_code
-# @ String (label='Threshold for non-OC channel', value='MaxEntropy') non_oc_threshold
+# @ Boolean (label='Analyse non-OC channel', value=false) process_extra
+# @ String (label='Channel code for non-OC channel', value='F') extra_code
+# @ String (label='Threshold for non-OC channel', value='MaxEntropy') extra_threshold
 # @ String (visibility=MESSAGE, value="Image pre-treatment settings") msg2
 # @ Integer (label='Subtract background radius', value=50, min=0) subtract_radius
 # @ Integer (label='Blur radius', value=2, min=0) blur_radius
@@ -49,35 +49,41 @@ def save_image(image, savedir):
         IJ.saveAsTiff(image, outname)
 
 
-def process_image(image, order, oncochrome, process_fr_channel, fr_threshold, sizes, results, savedir, subtract, blur):
+def process_image(image, order, oncochrome, process_extra, extra_threshold, sizes, results, savedir, subtract, blur):
     channelNames = oncochrome.getChannelNames()
     channelNumbers = range(1, oncochrome.getNChannels() + 1)
-    
+
+    # Image pre-treatments
     if subtract != 0:
         IJ.run(image, "Subtract Background...", "rolling={:d} disable stack".format(subtract))
     if blur != 0:
         IJ.run(image, "Gaussian Blur...", "sigma={:d} stack".format(blur))
-                    
+
+    # Generating the masks
     masks = oncochrome.getMasker().apply(image, image.getTitle() + " Masks", order)
     save_image(masks, savedir)
-    
+
+    # Volumetric analysis
     volumes = Helper.extractVolumes(masks, channelNumbers)
     for i, label in enumerate(channelNames):
         results.addValue("Vol_{}".format(label), volumes[i])
-    
-    if process_fr_channel:
+
+    # Analyzing the extra channel
+    if process_extra:
         masked = Util.applyMasks(masks, image.getTitle() + " Masked")
-        if fr_threshold == 'nuclei':
+        # Nuclei segmentation is done a posteriori
+        if extra_threshold == 'nuclei':
             segmenter = NucleiSegmenter(2.0)
             masked = segmenter.segment(masked, channelNumbers)
         save_image(masked, savedir)
-            
+
+        # Particle detection
         foci = Util.countParticles(masked, sizes[0], sizes[1], channelNumbers, masked, 0)
         for i, label in enumerate(channelNames):
             results.addValue("Foc_{}".format(label), foci[i])
-            
+
         masked.close()
-        
+
     masks.close()
 
 
@@ -85,22 +91,22 @@ def run_script():
     pathname = input_file.getAbsolutePath()
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
-    
+
     oncochrome = OncoChrome.getOncoChrome(oncochrome_setup);
     oncochrome.setControlMask(with_control)
-    if process_non_oc_channel:
-        if non_oc_threshold == 'nuclei':
-            oncochrome.setExtraChannel(non_oc_code, None)
+    if process_extra:
+        if extra_threshold == 'nuclei':
+            oncochrome.setExtraChannel(extra_code, None)
         else:
-            oncochrome.setExtraChannel(non_oc_code, non_oc_threshold)
-    
+            oncochrome.setExtraChannel(extra_code, extra_threshold)
+
     batch = BatchReader(pathname)
     while batch.next():
         img = batch.getImage()
         # Sanity check: don't try to process image with not enough channels
         if ( oncochrome.checkImage(img) ):
             batch.fillResultsTable(results)
-            process_image(img, batch.getCell("Channel Order"), oncochrome, process_non_oc_channel, non_oc_threshold, (minimum_size, maximum_size), results, savedir, subtract_radius, blur_radius)
+            process_image(img, batch.getCell("Channel Order"), oncochrome, process_extra, extra_threshold, (minimum_size, maximum_size), results, savedir, subtract_radius, blur_radius)
             results.show("Batch OC Counter Results")
         img.close()        
 
