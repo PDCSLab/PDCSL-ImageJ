@@ -1,9 +1,15 @@
 # @ File (label='Choose a CSV file', style='file') input_file
+# @ String (label='OncoChrome setup', choices={"brainv1"}, style='listBox') oncochrome_setup
+# @ Boolean (label='Create control mask', value=false, persist=false) with_control
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks
+# @ String (visibility=MESSAGE, value="Extra channel settings") msg1
 # @ Boolean (label='Analyse non-OC channel', value=false) process_non_oc_channel
+# @ String (label='Channel code for non-OC channel', value='F') non_oc_code
 # @ String (label='Threshold for non-OC channel', value='MaxEntropy') non_oc_threshold
+# @ String (visibility=MESSAGE, value="Image pre-treatment settings") msg2
 # @ Integer (label='Subtract background radius', value=50, min=0) subtract_radius
 # @ Integer (label='Blur radius', value=2, min=0) blur_radius
+# @ String (visibility=MESSAGE, value="Particle detection settings") msg3
 # @ Float (label='Minimum size', value=3.0, min=0, max=500) minimum_size
 # @ Float (label='Maximum size', value=50.0, min=0, max=500) maximum_size
 #
@@ -80,13 +86,13 @@ def run_script():
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
     
-    oncochrome = OncoChrome.getOncoChrome("brainv1");
-    oncochrome.setControlMask(True)
+    oncochrome = OncoChrome.getOncoChrome(oncochrome_setup);
+    oncochrome.setControlMask(with_control)
     if process_non_oc_channel:
         if non_oc_threshold == 'nuclei':
-            oncochrome.setExtraChannel('F', None)
+            oncochrome.setExtraChannel(non_oc_code, None)
         else:
-            oncochrome.setExtraChannel('F', non_oc_threshold)
+            oncochrome.setExtraChannel(non_oc_code, non_oc_threshold)
     
     batch = BatchReader(pathname)
     while batch.next():
