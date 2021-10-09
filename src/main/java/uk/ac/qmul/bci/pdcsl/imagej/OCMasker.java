@@ -54,7 +54,7 @@ public class OCMasker implements Command {
 
     @Override
     public void run() {
-        if ( customOncoChromeSetup != null ) {
+        if ( customOncoChromeSetup != null && !customOncoChromeSetup.isEmpty() ) {
             oncoChromeSetup = customOncoChromeSetup;
         }
 

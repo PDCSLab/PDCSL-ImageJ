@@ -93,7 +93,7 @@ def run_script():
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
     
-    if custom_oncochrome_setup is not None:
+    if custom_oncochrome_setup is not None and len(custom_oncochrome_setup) > 0:
         setup = custom_oncochrome_setup
     else:
         setup = oncochrome_setup
