@@ -19,6 +19,9 @@
 package uk.ac.qmul.bci.pdcsl.imagej;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.incenp.imagej.ChannelMasker;
 
@@ -295,15 +298,24 @@ public class OncoChrome {
      * instar larval brains.
      * </ul>
      * <p>
-     * Future versions will add more identifiers, and will also accept a formal
-     * description of an arbitrary setup.
+     * Future versions will add more identifiers.
+     * <p>
+     * It is also possible to pass a formal description of an OncoChrome setup. Such
+     * a formal specification is a semicolon-separated list of channel descriptions
+     * like the following: "A,Total,Threshold" where "A" is the one-letter channel
+     * code, "Total" is the name of the channel, and "Threshold" is the thresholding
+     * algorithm to apply to that channel. For example, the formal description of
+     * the "brainv1" setup is "G,Total,Huang; C,mTurquoise,Moments; G,GFP,Moments;
+     * Y,Citrine,Moments; R,mCherry,MaxEntropy".
      * 
      * @param spec an OncoChrome setup identifier
      * @return an OncoChrome object
      */
     public static OncoChrome getOncoChrome(String spec) {
+        OncoChrome onc = null;
+
         if ( spec.equalsIgnoreCase("brainv1") ) {
-            OncoChrome onc = new OncoChrome();
+            onc = new OncoChrome();
 
             onc.channels.add(new Channel('G', "Total", "Huang"));
             onc.channels.add(new Channel('C', "mTurquoise", "Moments"));
@@ -311,11 +323,32 @@ public class OncoChrome {
             onc.channels.add(new Channel('Y', "Citrine", "Moments"));
             onc.channels.add(new Channel('R', "mCherry", "MaxEntropy"));
             onc.nSourceChannels = 4;
-
-            return onc;
+        } else {
+            onc = parseOncoChromeSpec(spec);
         }
 
-        return null;
+        return onc;
+    }
+
+    /* Parses an OncoChrome formal specification as described above. */
+    private static OncoChrome parseOncoChromeSpec(String spec) {
+        OncoChrome onc = new OncoChrome();
+        Pattern pattern = Pattern.compile("([A-Z]),([A-Za-z_]+),([A-Za-z_-]+)");
+        HashSet<Character> channelCodes = new HashSet<Character>();
+
+        for ( String component : spec.split(" *; *") ) {
+            Matcher m = pattern.matcher(component);
+
+            if ( !m.find() ) {
+                throw new IllegalArgumentException(String.format("Invalid channel specification", component));
+            }
+            onc.channels.add(new Channel(m.group(1).charAt(0), m.group(2), m.group(3)));
+            channelCodes.add(m.group(1).charAt(0));
+        }
+
+        onc.nSourceChannels = channelCodes.size();
+
+        return onc;
     }
 
     /*

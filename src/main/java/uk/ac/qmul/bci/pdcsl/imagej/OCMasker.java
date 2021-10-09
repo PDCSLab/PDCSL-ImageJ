@@ -34,6 +34,9 @@ public class OCMasker implements Command {
     @Parameter(label = "OncoChrome setup", choices = { "brainv1" })
     private String oncoChromeSetup;
 
+    @Parameter(label = "Custom OncoChrome setup", required = false)
+    private String customOncoChromeSetup;
+
     @Parameter(label = "Order of channels")
     private String channelOrder;
 
@@ -51,6 +54,10 @@ public class OCMasker implements Command {
 
     @Override
     public void run() {
+        if ( customOncoChromeSetup != null ) {
+            oncoChromeSetup = customOncoChromeSetup;
+        }
+
         OncoChrome oncoChrome = OncoChrome.getOncoChrome(oncoChromeSetup);
         oncoChrome.setControlMask(withControlMask);
 

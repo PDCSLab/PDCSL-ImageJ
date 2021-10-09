@@ -1,5 +1,6 @@
 # @ File (label='Choose a CSV file', style='file') input_file
 # @ String (label='OncoChrome setup', choices={"brainv1"}, style='listBox') oncochrome_setup
+# @ String (label='Custom OncoChrome setup', required=false) custom_oncochrome_setup
 # @ Boolean (label='Create control mask', value=false, persist=false) with_control
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 # @ String (visibility=MESSAGE, value="Extra channel settings") msg1
@@ -91,8 +92,13 @@ def run_script():
     pathname = input_file.getAbsolutePath()
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
+    
+    if custom_oncochrome_setup is not None:
+        setup = custom_oncochrome_setup
+    else:
+        setup = oncochrome_setup
 
-    oncochrome = OncoChrome.getOncoChrome(oncochrome_setup);
+    oncochrome = OncoChrome.getOncoChrome(setup);
     oncochrome.setControlMask(with_control)
     if process_extra:
         if extra_threshold == 'nuclei':
