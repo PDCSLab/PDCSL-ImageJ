@@ -53,10 +53,10 @@ def run_script():
     while batch.next():
         img = batch.getImage()
         batch.fillResultsTable(results)
-        order = batch.getCell("Channel Order")
-        if order == "":
-            order = None
-        process_image(img, batch.getCell('MaskCommand'), results, savedir=savedir, remove_black_slices=exclude_blacks, order=order)
+        order = batch.getCell(["Channel Order"], None)
+        # We used to accept 'MaskCommand', so keep accepting it
+        maskCommand = batch.getCell(["Mask Command", "MaskCommand"])
+        process_image(img, order, results, savedir=savedir, remove_black_slices=exclude_blacks, order=order)
         img.close()
         results.show("Batch Volume Counter Results")
         
