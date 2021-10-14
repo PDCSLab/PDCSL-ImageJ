@@ -1,5 +1,5 @@
 # @ File (label='Choose a CSV file', style='file') input_file
-# @ String (label='OncoChrome setup', choices={"brainv1"}, style='listBox') oncochrome_setup
+# @ String (label='OncoChrome setup', choices={"Brain-v1", "FitFLP-v1"}, style='listBox') oncochrome_setup
 # @ String (label='Custom OncoChrome setup', required=false) custom_oncochrome_setup
 # @ Boolean (label='Create control mask', value=false, persist=false) with_control
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks

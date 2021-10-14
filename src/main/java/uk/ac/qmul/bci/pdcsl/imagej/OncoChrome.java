@@ -292,10 +292,11 @@ public class OncoChrome {
      * intended public interface to get an OncoChrome object. It accepts a string
      * identifier for pre-defined OncoChrome setups.
      * <p>
-     * Only one identifier is currently defined:
+     * The following identifiers are currently defined:
      * <ul>
-     * <li>"brainv1": a setup suitable for use with the OncoChrome v0/v1p on third
+     * <li>"brain-v1": a setup suitable for use with the OncoChrome v0/v1p on third
      * instar larval brains.
+     * <li>"fitflp-v1": a setup suitable for use with the FitFLP on wing discs.
      * </ul>
      * <p>
      * Future versions will add more identifiers.
@@ -305,7 +306,7 @@ public class OncoChrome {
      * like the following: "A,Total,Threshold" where "A" is the one-letter channel
      * code, "Total" is the name of the channel, and "Threshold" is the thresholding
      * algorithm to apply to that channel. For example, the formal description of
-     * the "brainv1" setup is "G,Total,Huang; C,mTurquoise,Moments; G,GFP,Moments;
+     * the "brain-v1" setup is "G,Total,Huang; C,mTurquoise,Moments; G,GFP,Moments;
      * Y,Citrine,Moments; R,mCherry,MaxEntropy".
      * 
      * @param spec an OncoChrome setup identifier
@@ -314,7 +315,7 @@ public class OncoChrome {
     public static OncoChrome getOncoChrome(String spec) {
         OncoChrome onc = null;
 
-        if ( spec.equalsIgnoreCase("brainv1") ) {
+        if ( spec.equalsIgnoreCase("brain-v1") ) {
             onc = new OncoChrome();
 
             onc.channels.add(new Channel('G', "Total", "Huang"));
@@ -322,6 +323,14 @@ public class OncoChrome {
             onc.channels.add(new Channel('G', "GFP", "Moments"));
             onc.channels.add(new Channel('Y', "Citrine", "Moments"));
             onc.channels.add(new Channel('R', "mCherry", "MaxEntropy"));
+            onc.nSourceChannels = 4;
+        } else if ( spec.equalsIgnoreCase("fitflp-v1") ) {
+            onc = new OncoChrome();
+
+            onc.channels.add(new Channel('D', "DAPI", "Huang"));
+            onc.channels.add(new Channel('G', "GFP", "Moments"));
+            onc.channels.add(new Channel('Y', "Citrine", "Moments"));
+            onc.channels.add(new Channel('R', "mCherry", "RenyiEntropy"));
             onc.nSourceChannels = 4;
         } else {
             onc = parseOncoChromeSpec(spec);

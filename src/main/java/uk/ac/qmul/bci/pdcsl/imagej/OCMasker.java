@@ -31,7 +31,7 @@ public class OCMasker implements Command {
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "OncoChrome setup", choices = { "brainv1" })
+    @Parameter(label = "OncoChrome setup", choices = { "Brain-v1", "FitFLP-v1" })
     private String oncoChromeSetup;
 
     @Parameter(label = "Custom OncoChrome setup", required = false)
