@@ -1,0 +1,76 @@
+  ------------
+  PDCSL ImageJ
+  ------------
+  Damien Goutte-Gattat
+  --------------------
+  2021-10-12
+  ----------
+  
+  <PDCSL-ImageJ> is a collection of plugins and scripts for the
+  {{{https://imagej.net}ImageJ}} image analysis software, in use in the
+  Protein Dynamics and Cell Signaling Laboratory (PDCSL) at the Barts
+  Cancer Institute (BCI), Queen Mary University of London.
+  
+  PDCSL-ImageJ is distributed under the terms of the GNU General Public
+  License, version 3 or higher.
+  
+  
+Setup
+
+  PDCSL-ImageJ requires the
+  {{{https://incenp.org/dvlpt/imagej-plugins}Incenp ImageJ Plugins}},
+  which need to be installed manually along with PDCSL-ImageJ.
+  
+  Download the archives for the plugins:
+  
+  * {{{https://repo1.maven.org/maven2/org/incenp/incenp-imagej-plugins/0.9.6/incenp-imagej-plugins-0.9.6.jar}incenp-imagej-plugins-0.9.6.jar}}
+  
+  * {{{https://github.com/PDCSLab/PDCSL-ImageJ/releases/download/pdcsl-imagej-0.1.10/pdcsl-imagej-0.1.10.jar}pdcsl-imagej-0.1.10.jar}}
+  
+  []
+  
+  Copy the JAR archives into the <<<plugins/>>> folder of your FIJI
+  installation, then (re)start FIJI. Check that the plugins have been
+  correctly installed by looking for two menu items called
+  <Incenp.org Plugins…> and <PDCSL Plugins…> in ImageJ’s
+  <Help\>About Plugins> menu.
+  
+  
+Contents
+
+  PDCSL-ImageJ provides the following plugins, available from ImageJ’s
+  <Plugins\>PDCSL> menu:
+  
+  * {{{./misc-plugins.html#Foci_Counter}Foci Counter}}: Intended for
+  counting ɣH2A.X (or similar) foci in fly tissues.
+  
+  * {{{./misc-plugins.html#Nuclei_Counter}Nuclei Counter}}: Intended
+  for counting cell nuclei in fly tissues.
+  
+  * {{{./misc-plugins.html#Volume_Counter}Volume Counter}}: Compute
+  volumes from binary stacks.
+  
+  * {{{./oc-masker.html}OC Masker}}: Create binary masks for
+  OncoChrome-positive regions.
+  
+  []
+  
+  PDCSL-ImageJ also provides a set of batch scripts, which are intended
+  to be run on a list of image files rather than on a single, already
+  opened image. Those scripts are available from ImageJ’s
+  <Plugins\>PDCSL\>Batch> menu:
+  
+  * {{{./misc-scripts.html#Batch_Volume_Counter}Batch Volume Counter}}:
+  Extract the volumes of regions resulting from applying user-defined
+  masks.
+  
+  * {{{./misc-scripts.html#Batch_Foci_Counter}Batch Foci Counter}}:
+  Count foci in regions defined by a user-defined mask.
+  
+  * {{{./batch-oc-counter.html}Batch OC Counter}}: Extract volumes from
+  OncoChrome-positive regions, and optionally count foci or nuclei in
+  those regions.
+  
+  * {{{./misc-scripts.html#Quantify_Wing_Discs}Quantify Wing Discs}}:
+  Intended to quantify fluorescence in anterior and posterior
+  compartments of fly wing discs.

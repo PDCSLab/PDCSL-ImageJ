@@ -1,0 +1,122 @@
+Miscellaneous Batch Scripts
+
+* Quantify Wing Discs
+
+  This script expects images containing 3 channels: a DAPI channel
+  staining the entire wing disc, a “Mark” channel staining only a region
+  of the wing disc (e.g. only the posterior compartment), and a “Signal”
+  channel containing the signal of interest to quantify. The script will
+  quantify the signal’s mean intensity in both the region labelled in
+  the “Mark” channel and the opposite region.
+  
+  For the script to work, the input CSV file must contain a column named
+  <<<Channel Order>>> containing a string giving the order of channels
+  in each image, with <<<D>>> standing for the DAPI channel, <<<M>>>
+  standing for the “Mark” channel, and <<<S>>> standing for the “Signal”
+  channel. For example, <<<DMS>>> means that the first channel contains
+  the DAPI staining, the second channel contains the regional marker,
+  and the third channel contains the signal to quantify.
+  
+  A minimal CSV file for that script would thus be:
+  
++-----------------------+
+Image,Channel Order
+/path/to/image1.tif,DMS
+/path/to/image2.tif,SMD
++-----------------------+
+
+  The script will generate a results table with the following columns:
+  
+  * <<<Image>>>: the name of the original image;
+  
+  * <<<Side>>>: indicates which part of the image is quantified (either
+  <<<Marked>>> for the part labelled in the “Mark” channel, or
+  <<<Control>>> for the opposite part);
+  
+  * <<<Area>>>: the size of the part, in µm²;
+  
+  * <<<Mean>>>: the mean intensity of the signal in that part.
+  
+  []
+  
+  In addition, if the <<<Save mask images>>> option is enabled when
+  launching the script, the generated masks will be saved as new images
+  in the same folder as the source CSV file.
+
+
+* Batch Foci Counter
+
+  This is a batch version of the {{{./misc-plugins.html}Foci Counter}}
+  plugin. It works on images containing one channel with the signal to
+  analyse (the ”Signal” channel, where the foci will be detected) and
+  one channel delimiting the area to analyse (the “Mark” channel – only
+  foci within that area will be detected).
+  
+  The input CSV file must contain a column named <<<Channel Order>>>,
+  containing a string indicating the order of channels in each image,
+  with <<<S>>> standing for the “Signal” channel and <<<M>>> standing
+  for the “Mark” channel.
+  
+[images/batch-foci-counter-settings.png] Parameters for the <Batch Foci
+Counter> script.
+
+  In addition to the source CSV file, the script expects the following
+  parameters:
+  
+  * <<<Thresholding method for area>>>: The thresholding algorithm to
+  apply to the “Mark” channel to define the marked regions.
+  
+  * <<<Thresholding method for foci>>>: The thresholding algorithm to
+  apply to the ”Signal” channel to isolate the foci.
+  
+  I typically use the <MaxEntropy> algorithm for quantifying ɣH2A.X foci
+  and the <RenyiEntropy> algorithm to quantify H3S10P-positive cells.
+  
+  * <<<Project Z-stack>>>: If enabled, Z-stacked images will be
+  max-projectedl the default behaviour is to process every Z-slices
+  independently and sum the results.
+  
+  * <<<Minimum size>>> and <<<Maximum size>>>: Only detect foci within
+  the specified range of sizes (expressed in pixels).
+  
+  * <<<Save mask images>>>: If enabled, the script will save the
+  generated masks to disk (in the same folder as the one containing the
+  input CSV file).
+  
+  []
+  
+  The script will produce a results table containing, for each source
+  image, the number of detected foci (column <<<Foci>>>) and the volume
+  of the marked region (column <<<Volume>>>).
+  
+  
+* Batch Volume Counter
+
+  This is a batch version of the {{{./misc-plugins.html}Volume Counter}}
+  plugin. However it does not expect that the source images will already
+  be binary images; instead the script will perform the thresholding and
+  binarization itself, and then proceed with the calculation of the
+  volumes occupied by the binary regions.
+  
+  The thresholding is performed according to a user-specified command
+  that should be contained in a column named <<<Mask Command>>> in the
+  input CSV file. Refer to the
+  {{{https://incenp.org/dvlpt/imagej-plugins/library.html}documentation}}
+  of the <incenp-imagej-plugins> package for details about how to
+  construct the masking command. Here is an example:
+  
++--------------------------+
+1:MASK(Huang),3:MASK(Otsu)
++--------------------------+
+
+  This will create a binary image with two channels, the first channel
+  being the result of applying the <Huang> thresholding algorithm to the
+  first channel of the source image, and the second channel being the
+  result of applying the <Otsu> thresholding algorithm to the third
+  channel of the source image.
+  
+  The script will produce a results table containing for each image the
+  volumes occupied by white pixels in each binarized channels. As for
+  the other batch scripts, an option <<<Save mask images>>> allows to
+  save the generated masks for further analysis or to check whether the
+  masking gave appropriate results.

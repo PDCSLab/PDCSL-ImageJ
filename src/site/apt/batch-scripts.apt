@@ -1,0 +1,27 @@
+The PDCSL Batch Scripts
+
+  All “batch” scripts (in the <<<Plugins\>PDCSL\>Batch>>> menu) use as
+  input a CSV file containing the list of images to process. That CSV
+  file <must> contain a header line, and the first column <must>
+  contain the pathnames of the images to process.
+  
+  Lines starting with a <<<#>>> are treated as comments and are ignored.
+  
+  Pathnames in the first column may be relative or absolute. If they are
+  relative, they are relative to the folder containing the CSV file.
+  
+  Here is an example of a minimal input CSV file:
+  
++-------------------+
+Image
+/path/to/image1.tif
+/path/to/image2.tif
++-------------------+
+
+  The file may contain other columns beyond the ”Image” column:
+  
++------------------------------+
+Image,Genotype,Heatshock
+/path/to/image1.tif,WT,0
+/path/to/image2.tif,UAS>EGFR,1
++------------------------------+

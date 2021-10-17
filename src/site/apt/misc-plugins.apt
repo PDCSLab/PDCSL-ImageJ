@@ -1,0 +1,86 @@
+Miscellaneous Plugins
+
+* Foci Counter
+
+  The purpose of this plugin is to count foci on images of fly tissues.
+  It has especially been used to count ɣH2A.X foci and H3S10P-positive
+  cells on images of larval brains.
+  
+[images/foci-counter-settings.png] Parameters for the <Foci Counter>
+plugin
+
+  This plugin expects the following parameters:
+  
+  * <<<Thresholding method>>>: How to threshold the image to isolate the
+  foci. Possible values are:
+  
+    * <<<none>>>: No thresholding will be performed. Use this if the
+    image has already been thresholded by another mean prior to running
+    the plugin.
+    
+    * <<<preset>>>: Use a fixed threshold value that has already been
+    set using ImageJ’s thresholding tool.
+    
+    * Any of the automatic thresholding algorithms available in ImageJ:
+    <<<Huang>>>, <<<IJ_Isodata>>>, <<<Intermodes>>>, <<<Isodata>>>,
+    <<<MaxEntropy>>>, <<<Mean>>>, <<<Min_Error>>>, <<<Minimum>>>,
+    <<<Moments>>>, <<<Otsu>>>, <<<Percentile>>>, <<<RenyiEntropy>>>,
+    <<<Triangle>>>, <<<Yen>>>, <<<Bernsen>>>, <<<Contrast>>>,
+    <<<Mean_Local>>>, <<<Median>>>, <<<Midgrey>>>, <<<Niblack>>>,
+    <<<Otsu_local>>>, <<<Phansalkar>>>, and <<<Sauvola>>>.
+    
+  * <<<Channels>>>: The channel(s) on which to detect foci. Can be
+  <<<selected>>> to process the currently selected channel, <<<all>>>
+  to process every channel, or a list of 1-based channel indexes (the
+  list can be space-, comma-, or semicolon-separated).
+  
+  * <<<Project stack>>>: If selected and the source image is a Z-stack,
+  it will be max-projected before foci detection. The default is to
+  process every Z-slice separately and sum the results.
+  
+  * <<<Minimum size>>> and <<<Maximum size>>>: Only detect foci within
+  the specified range of sizes (expressed in pixels).
+  
+  * <<<Include ROI>>>: If selected and the image contains a ROI, foci
+  will only be detected <within> the ROI. The default behaviour when a
+  ROI is present is to only detect foci <outside> of the ROI.
+  
+  []
+  
+  Running the plugin will generate a new image containing, for each
+  analysed channel, a channel with the thresholded image and a channel
+  with the outlines of the detected foci. It will also display a results
+  table containing the numbers of detected foci for each channel.
+  
+  
+* Nuclei Counter
+
+  This plugin will attempt to detect and count cells in an image. It has
+  been used to count <Repo>-stained larval brains and also
+  GFP-expressing S2 cells fixed on coverslips.
+  
+  It accepts a single parameter which is the list of channels to
+  process. As for the <<<Foci Counter>>> plugin above, the value of that
+  parameter may be <<<selected>>>, <<<all>>>, or a list of 1-based
+  channel indexes.
+  
+  It will display a results table with the count of detected cells in
+  each channel. Optionally, if the <<<Show the segmented image?>>>
+  checkbox is ticked, it will also display a new image containing the
+  thresholded and segmented channel(s) of the source image.
+  
+  
+* Volume Counter
+
+  This plugin expects an image containing binary masks (where white
+  pixels define region(s) of interest and everything else is black). It
+  will estimate the volume that the white regions of the image
+  represents.
+  
+  It accepts a single parameter which is the list of channels to
+  process. As for the <<<Foci Counter>>> plugin above, the value of that
+  parameter may be <<<selected>>>, <<<all>>>, or a list of 1-based
+  channel indexes.
+  
+  It will display a results table with the volumes of the white pixels
+  (in µm³) in each channel.

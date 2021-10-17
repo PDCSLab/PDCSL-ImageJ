@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.8.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0
+                      http://maven.apache.org/xsd/decoration-1.8.0.xsd">
+  <body>
+    <links>
+      <item name="Barts Cancer Institute" href="https://bartscancer.london/" />
+    </links>
+    <menu name="PDCSL ImageJ">
+      <item name="About" href="index.html" />
+      <item name="Miscellaneous plugins" href="misc-plugins.html" />
+      <item name="OC Masker plugin" href="oc-masker.html" />
+      <item name="Batch scripts" href="batch-scripts.html">
+        <item name="Miscellaneous scripts" href="misc-scripts.html" />
+        <item name="Batch OC counter script" href="batch-oc-counter.html" />
+      </item>
+    </menu>
+    <menu ref="reports" />
+    <footer><![CDATA[Copyright © 2021 Damien Goutte-Gattat]]></footer>
+  </body>
+  
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.9</version>
+  </skin>
+  
+  <custom>
+    <fluidoSkin>
+      <topBarEnabled>true</topBarEnabled>
+      <sideBarEnabled>false</sideBarEnabled>
+    </fluidoSkin>
+  </custom>
+
+</project>

@@ -1,0 +1,114 @@
+The OC Masker Plugin
+
+  This plugin is specifically intended for the <OncoChrome> and projects
+  using similar constructs. Given a typical OncoChrome image, containing
+  one channel for each of the OncoChrome fluorophore plus optionally a
+  far-red channel, it will create a new image containing binary masks
+  for each of the OncoChrome fluorophores.
+  
+[images/oc-masker-settings.png] Parameters for the <OC Masker> plugin.
+
+  This plugin expects the following parameters:
+  
+  * <<<OncoChrome setup>>>: One of the pre-defined OncoChrome
+  configurations (more on that below).
+  
+  * <<<Custom OncoChrome setup>>>: If you want to use an OncoChrome
+  configuration that is not already pre-defined, it can be specified
+  here, using the syntax described below.
+  
+  * <<<Order of channels>>>: A series of letters indicating the orders
+  of the different channels in the source image. Which letters can be
+  used depends on the configuration, but with most configurations, it
+  will be:
+  
+    * <<<G>>> for the <GFP> channel,
+    
+    * <<<Y>>> for the <Citrine> (“yellow”) channel,
+    
+    * <<<R>>> for the <mCherry> (“red”),
+    
+    * <<<C>>> for the <mTurquoise> (“cyan”) channel,
+    
+    * <<<F>>> for the <far-red> channel,
+    
+    * <<<D>>> for the <DAPI> channel.
+    
+  For example, <<<GCRY>>> means that the first channel in the image is
+  the GFP channel, then comes the mTurquoise channel, then the mCherry
+  channel, and finally the mCitrine channel.
+  
+  * <<<Thresholding algorithm for non-OC channel ('F')>>>: If the
+  image contains a far-red channel, this parameter indicates which
+  thresholding algorithm to apply to it. It must be one of the
+  available thresholding algorithm available in ImageJ/FIJI, as listed
+  in the description of the {{{./misc-plugins.html}Foci Counter
+  plugin}}. Leave that parameter empty if no thresholding of the
+  far-red channel is desired.
+  
+  The rationale for this parameter is that, depending on the kind of
+  signal to analyse on the far-red channel, it may be better to
+  threshold it <before> the OncoChrome masks have been applied to it,
+  rather than <after>.
+  
+  * <<<Compute control mask>>>: If this option is enabled, the plugin
+  will generate a supplementary mask corresponding to the “control”
+  part of the tissue – that ism the regions that don’t express any of
+  the OncoChrome fluorophore. This assumes that the first channel in
+  the OncoChrome configuration masks the entire tissue (this is the
+  case in the <<<Brain-v1>>> and <<<FitFLP-v1>>> predeefined
+  configurations).
+  
+  * <<<Apply the masks>>>: If this option is enabled and the image
+  contains a far-red channel, the plugin will generate another image
+  containing several copies of the far-red channel, each copy masked by
+  one of the OncoChrome fluorophore (that is, one channel will contain
+  the far-red signal in the GFP-positive area, another one will contain
+  the far-red signal in the Citrine-positive area, and so on).
+  
+  
+* OncoChrome configurations
+
+  An OncoChrome configuration describes the channels that make up an
+  OncoChrome image and the thresholding algorithms to use to create the
+  masks for each channel. It is formally represented as a
+  semicolon-separated list of channel specifications, where each channel
+  specification takes the following form:
+  
++----------------+
+X,Name,Algorithm 
++----------------+
+
+  where <X> is the one-letter code of the channel, <Name> is the channel
+  name, and <Algorithm> is the name of the thresholding algorithm to use
+  for that channel.
+  
+  For example, the predefined <<<Brain-v1>>> configuration is formally
+  described as follows (line breaks added for clarity):
+  
++---------------------+
+G,Total,Huang;
+C,mTurquoise,Moments;
+G,GFP,Moments;
+Y,Citrine,Moments;
+R,mCherry,MaxEntropy
++---------------------+
+
+  This indicates that an OncoChrome image should be analysed by:
+  
+  * applying the <Huang> thresholding algorithm to the <G> channel,
+  creating the “Total” mask;
+  
+  * applying the <Moments> thresholding algorithm to the <C>, <G>, and
+  <Y> channels, creating the “mTurquoise”, “GFP”, and ”Citrine” masks,
+  respectively;
+  
+  * applying the <MaxEntropy> algorithm to the <R> channel, creating the
+  “mCherry” mask.
+  
+  []
+  
+  Using a custom OncoChrome configuration allows to use different
+  thresholding algorithms and even different fluorophore combinations
+  (e.g., GFP/YFP/dsRed instead of mTurquoise/GFP/Cintrine/mCherry) than
+  in the standard <<<Brain-v1>>> configuration.

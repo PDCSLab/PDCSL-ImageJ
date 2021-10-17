@@ -1,0 +1,93 @@
+The Batch OC Counter Script
+
+  This is the main script used to perform the analyses of
+  OncoChrome-stained brains. For each source image, it will determine
+  the volumes occupied by each OncoChrome fluorophore, and optionally
+  detect and count foci or nuclei in the far-red channel, if any (e.g.
+  <Repo>-stained nuclei, ɣH2A.X foci, or H3S10P-positive nuclei).
+  
+  The input CSV file should contain a column named <<<Channel Order>>>
+  containing a series of letters representing the channels in the source
+  image, with:
+  
+  * <<<G>>> representing the <GFP> channel;
+  
+  * <<<Y>>> representing the <Citrine> channel;
+  
+  * <<<C>>> representing the <mTurquoise> channel;
+  
+  * <<<R>>> representing the <mCherry> channel;
+  
+  * <<<F>>> representing the <far-red> channel (if present in the
+  image).
+  
+  []
+  
+[images/batch-oc-counter-settings.png] Parameters for the <Batch OC
+Counter> script.
+
+  Script-level parameters are:
+  
+  * <<<OncoChrome setup>>>: one of the pre-defined OncoChrome
+  configurations.
+  
+  * <<<Custom OncoChrome setup>>>: a formal description of a custom
+  OncoChrome configuration, to be used instead of one of the pre-defined
+  configurations.
+  
+  * <<<Create control mask>>>: If enabled, a mask corresponding to the
+  “control” region of the sample (not expressing any fluorophore) will
+  be created and analyzed as well.
+  
+  * <<<Save mask images>>>: Save all masks generated when analyzing the
+  images, in the same folder as the one containing the input CSV file.
+  
+  * <<<Analyse non-OC channel>>>: If this option is enabled and the
+  image contains a far-red channel, the script will attempt to detect
+  nuclei or foci in that channel. The default behaviour is to ignore the
+  far-red channel (that is, perform only volumetric analysis) even if it
+  is present.
+  
+  * <<<Channel code for non-OC channel>>>: the one-letter code
+  representing the non-OC channel in the <<<Channel Order>>> column in
+  the input CSV file.
+  
+  * <<<Threshold for non-OC channel>>>: If analysis of the far-red
+  channel has been enabled, this option indicates which thresholding
+  algorithm to apply to the far-red channel prior to nuclei/foci
+  detection. The value should be the name of one of the automatic
+  thresholding algorithms available in ImageJ, or the special value
+  <<<nuclei>>> to use the same algorithm as the
+  {{{./misc-plugins.html#Nuclei_Counter}Nuclei Counter}} plugin.
+  
+  * <<<Subtract background radius>>>: If set to a non-zero value,
+  background subtraction will be performed on all channels before
+  thresholding the images; the value is the radius of the “rolling
+  ball” used to perform the background subtraction (default is 50
+  pixels).
+  
+  * <<<Gaussian blur radius>>>: If set to a non-zero value, a Gaussian
+  blur will be applied on all channels before thresholding the images
+  (after background subtraction, if it has been enabled); the value is
+  the “sigma” parameter of ImageJ’s Gaussian blur filter (default is 2).
+  
+  * <<<Minimum size>>> and <<<Maximum size>>>: If analysis of the
+  far-red channel has been enabled, those parameters define the range of
+  sizes used to detect nuclei or foci.
+  
+
+* Typical parameters used for OncoChrome studies
+
+  * To detect and count <Repo>-stained nuclei: thresholding algorithm
+  <<<nuclei>>>, no background subtraction, no Gaussian blur, and no size
+  limits (minimum size 0, maximum size 500).
+  
+  * To detect and count ɣH2A.X foci: thresholding algorithm
+  <<<MaxEntropy>>>, other parameters left as by default (background
+  subtraction radius 50 pixels, Gaussian blur radius 2 pixels,
+  minimum size 3, maximum size 50).
+  
+  * To detect and count H3S10P-positive nuclei: thresholding algorithm
+  <<<RenyiEntropy>>>, other parameters left as by default (background
+  subtraction radius 50 pixels, Gaussian blur radius 2 pixels,
+  minimum size 3, maximum size 50).
