@@ -18,6 +18,9 @@
 
 package uk.ac.qmul.bci.pdcsl.imagej;
 
+import java.util.ArrayList;
+
+import org.incenp.imagej.ThresholdingMethod;
 import org.scijava.Initializable;
 import org.scijava.command.Command;
 import org.scijava.command.DynamicCommand;
@@ -43,7 +46,7 @@ public class OCMasker extends DynamicCommand implements Initializable {
     @Parameter(label = "Order of channels")
     private String channelOrder;
 
-    @Parameter(label = "Thresholding algorithm for non-OC channel ('F')", required = false)
+    @Parameter(label = "Thresholding algorithm for non-OC channel ('F')")
     private String nonOCThreshold;
 
     @Parameter(label = "Compute control mask")
@@ -65,6 +68,8 @@ public class OCMasker extends DynamicCommand implements Initializable {
         oncoChrome.setControlMask(withControlMask);
 
         if ( image.getNChannels() > oncoChrome.getNSourceChannels() ) {
+            if ( nonOCThreshold == "NONE" )
+                nonOCThreshold = null;
             oncoChrome.setExtraChannel('F', nonOCThreshold);
         }
 
@@ -81,5 +86,16 @@ public class OCMasker extends DynamicCommand implements Initializable {
     public void initialize() {
         final MutableModuleItem<String> setupItem = getInfo().getMutableInput("oncoChromeSetup", String.class);
         setupItem.setChoices(OncoChrome.getPredefinedSetups());
+
+        ArrayList<String> algos = new ArrayList<String>();
+        algos.add("NONE");
+        for ( ThresholdingMethod m : ThresholdingMethod.values() ) {
+            if ( m == ThresholdingMethod.FIXED )
+                continue;
+            algos.add(m.toString());
+        }
+
+        final MutableModuleItem<String> nonOCThresholdItem = getInfo().getMutableInput("nonOCThreshold", String.class);
+        nonOCThresholdItem.setChoices(algos);
     }
 }
