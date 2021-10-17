@@ -19,7 +19,9 @@
 package uk.ac.qmul.bci.pdcsl.imagej;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -337,6 +339,15 @@ public class OncoChrome {
         }
 
         return onc;
+    }
+
+    /**
+     * Gets the list of pre-defined OncoChrome setups.
+     * 
+     * @return a list of names for available OncoChrome setups.
+     */
+    public static List<String> getPredefinedSetups() {
+        return Arrays.asList("Brain-v1", "FitFlp-v1");
     }
 
     /* Parses an OncoChrome formal specification as described above. */

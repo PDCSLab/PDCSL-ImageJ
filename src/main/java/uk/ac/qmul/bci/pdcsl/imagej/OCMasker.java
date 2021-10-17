@@ -18,7 +18,10 @@
 
 package uk.ac.qmul.bci.pdcsl.imagej;
 
+import org.scijava.Initializable;
 import org.scijava.command.Command;
+import org.scijava.command.DynamicCommand;
+import org.scijava.module.MutableModuleItem;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
@@ -26,12 +29,12 @@ import org.scijava.ui.UIService;
 import ij.ImagePlus;
 
 @Plugin(type = Command.class, menuPath = "Plugins>PDCSL>OC Masker")
-public class OCMasker implements Command {
+public class OCMasker extends DynamicCommand implements Initializable {
 
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "OncoChrome setup", choices = { "Brain-v1", "FitFLP-v1" })
+    @Parameter(label = "OncoChrome setup")
     private String oncoChromeSetup;
 
     @Parameter(label = "Custom OncoChrome setup", required = false)
@@ -72,5 +75,11 @@ public class OCMasker implements Command {
             ImagePlus masked = Util.applyMasks(masks, image.getTitle() + " Masked");
             uiService.show(masked);
         }
+    }
+
+    @Override
+    public void initialize() {
+        final MutableModuleItem<String> setupItem = getInfo().getMutableInput("oncoChromeSetup", String.class);
+        setupItem.setChoices(OncoChrome.getPredefinedSetups());
     }
 }
