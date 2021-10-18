@@ -60,7 +60,9 @@ public class OCMasker extends DynamicCommand implements Initializable {
 
     @Override
     public void run() {
-        if ( customOncoChromeSetup != null && !customOncoChromeSetup.isEmpty() ) {
+        if ( oncoChromeSetup == "Custom..." ) {
+        	if ( customOncoChromeSetup == null || customOncoChromeSetup.isEmpty() )
+        		throw new RuntimeException("No custom setup specified");
             oncoChromeSetup = customOncoChromeSetup;
         }
 
@@ -84,8 +86,11 @@ public class OCMasker extends DynamicCommand implements Initializable {
 
     @Override
     public void initialize() {
+    	ArrayList<String> setups = new ArrayList<String>(OncoChrome.getPredefinedSetups());
+    	setups.add("Custom...");
+
         final MutableModuleItem<String> setupItem = getInfo().getMutableInput("oncoChromeSetup", String.class);
-        setupItem.setChoices(OncoChrome.getPredefinedSetups());
+        setupItem.setChoices(setups);
 
         ArrayList<String> algos = new ArrayList<String>();
         algos.add("NONE");
