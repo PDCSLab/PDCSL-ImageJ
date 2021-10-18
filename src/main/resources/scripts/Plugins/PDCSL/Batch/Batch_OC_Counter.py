@@ -1,12 +1,12 @@
 # @ File (label='Choose a CSV file', style='file') input_file
-# @ String (label='OncoChrome setup', choices={"Brain-v1", "FitFLP-v1"}, style='listBox') oncochrome_setup
+# @ String (label='OncoChrome setup', choices={"Brain-v1", "FitFLP-v1", "Custom..."}, style='listBox') oncochrome_setup
 # @ String (label='Custom OncoChrome setup', required=false) custom_oncochrome_setup
 # @ Boolean (label='Create control mask', value=false, persist=false) with_control
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 # @ String (visibility=MESSAGE, value="Extra channel settings") msg1
 # @ Boolean (label='Analyse non-OC channel', value=false) process_extra
 # @ String (label='Channel code for non-OC channel', value='F') extra_code
-# @ String (label='Threshold for non-OC channel', value='MaxEntropy') extra_threshold
+# @ String (label='Threshold for non-OC channel', choices={"NUCLEI", "HUANG", "IJ_ISODATA", "INTERMODES", "ISODATA", "LI", "MAX_ENTROPY", "MEAN", "MIN_ERROR", "MINIMUM", "MOMENTS", "OTSU", "PERCENTILE", "RENYI_ENTROPY", "TRIANGLE", "YEN", "BERNSEN", "CONTRAST", "MEAN_LOCAL", "MEDIAN", "MIDGREY", "NIBLACK", "OTSU_LOCAL", "PHANSALKAR", "SAUVOLA"}) extra_threshold
 # @ String (visibility=MESSAGE, value="Image pre-treatment settings") msg2
 # @ Integer (label='Subtract background radius', value=50, min=0) subtract_radius
 # @ Integer (label='Blur radius', value=2, min=0) blur_radius
@@ -73,7 +73,7 @@ def process_image(image, order, oncochrome, process_extra, extra_threshold, size
     if process_extra:
         masked = Util.applyMasks(masks, image.getTitle() + " Masked")
         # Nuclei segmentation is done a posteriori
-        if extra_threshold == 'nuclei':
+        if extra_threshold == 'NUCLEI':
             segmenter = NucleiSegmenter(2.0)
             masked = segmenter.segment(masked, channelNumbers)
         save_image(masked, savedir)
@@ -92,8 +92,10 @@ def run_script():
     pathname = input_file.getAbsolutePath()
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
-    
-    if custom_oncochrome_setup is not None and len(custom_oncochrome_setup) > 0:
+
+    if oncochrome_setup == 'Custom...':
+        if custom_oncochrome_setup is None or len(custom_oncochrome_setup) == 0:
+            raise RuntimeException("No custom setup specified")
         setup = custom_oncochrome_setup
     else:
         setup = oncochrome_setup
@@ -101,7 +103,7 @@ def run_script():
     oncochrome = OncoChrome.getOncoChrome(setup);
     oncochrome.setControlMask(with_control)
     if process_extra:
-        if extra_threshold == 'nuclei':
+        if extra_threshold == 'NUCLEI':
             oncochrome.setExtraChannel(extra_code, None)
         else:
             oncochrome.setExtraChannel(extra_code, extra_threshold)

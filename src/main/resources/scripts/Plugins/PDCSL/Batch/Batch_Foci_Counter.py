@@ -1,6 +1,6 @@
 # @ File(label='Choose a CSV file', style='file') input_file
-# @ String(label='Thresholding method for area', value='Huang') area_thresholder
-# @ String(label='Thresholding method for foci', value='MaxEntropy') foci_thresholder
+# @ String(label='Thresholding method for area', choices={"HUANG", "IJ_ISODATA", "INTERMODES", "ISODATA", "LI", "MAX_ENTROPY", "MEAN", "MIN_ERROR", "MINIMUM", "MOMENTS", "OTSU", "PERCENTILE", "RENYI_ENTROPY", "TRIANGLE", "YEN", "BERNSEN", "CONTRAST", "MEAN_LOCAL", "MEDIAN", "MIDGREY", "NIBLACK", "OTSU_LOCAL", "PHANSALKAR", "SAUVOLA"}) area_thresholder
+# @ String(label='Thresholding method for foci', choices={"HUANG", "IJ_ISODATA", "INTERMODES", "ISODATA", "LI", "MAX_ENTROPY", "MEAN", "MIN_ERROR", "MINIMUM", "MOMENTS", "OTSU", "PERCENTILE", "RENYI_ENTROPY", "TRIANGLE", "YEN", "BERNSEN", "CONTRAST", "MEAN_LOCAL", "MEDIAN", "MIDGREY", "NIBLACK", "OTSU_LOCAL", "PHANSALKAR", "SAUVOLA"}) foci_thresholder
 # @ Boolean(label='Project Z-stack', value=false) project_stack
 # @ Float(label='Minimum size', value=3.0, min=0, max=500) minimum_size
 # @ Float(label='Maximum size', value=50.0, min=0, max=500) maximum_size

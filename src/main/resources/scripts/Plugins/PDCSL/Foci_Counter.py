@@ -1,5 +1,5 @@
 # @ ImagePlus img
-# @ String(label='Thresholding method', value='MaxEntropy') thresholding_method
+# @ String(label='Thresholding method', choices={"NONE", "PRESET", "HUANG", "IJ_ISODATA", "INTERMODES", "ISODATA", "LI", "MAX_ENTROPY", "MEAN", "MIN_ERROR", "MINIMUM", "MOMENTS", "OTSU", "PERCENTILE", "RENYI_ENTROPY", "TRIANGLE", "YEN", "BERNSEN", "CONTRAST", "MEAN_LOCAL", "MEDIAN", "MIDGREY", "NIBLACK", "OTSU_LOCAL", "PHANSALKAR", "SAUVOLA"}) thresholding_method
 # @ String(label='Channel(s) to process', value='selected') channel_list
 # @ Boolean(label='Project stack', value=false) project_stack
 # @ Float(label='Minimum size', value=3.0, min=0, max=500) minimum_size
@@ -40,11 +40,11 @@ def process_image(image, channels, method, project, min_size, max_size, roi_in):
         # The ROI is to be *excluded* from the analysis
         roi = roi.getInverse(image)
         
-    if method == 'preset':
+    if method == 'PRESET':
         # Get pre-defined threshold
         min_threshold = image.getProcessor().getMinThreshold()
         method = 'MASK(FIXED,{:.0f})'.format(min_threshold)
-    elif method == 'none':
+    elif method == 'NONE':
         method = 'COPY()'
     else:
         method = 'MASK({:s})'.format(method)
