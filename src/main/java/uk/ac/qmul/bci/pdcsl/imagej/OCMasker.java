@@ -61,7 +61,7 @@ public class OCMasker extends DynamicCommand implements Initializable {
 
     @Override
     public void run() {
-        if ( oncoChromeConfig == "Custom..." ) {
+        if ( oncoChromeConfig.equals("Custom...") ) {
         	if ( customOncoChromeConfig == null || customOncoChromeConfig.isEmpty() )
         		throw new RuntimeException("No custom configuration specified");
             oncoChromeConfig = customOncoChromeConfig;
@@ -71,7 +71,7 @@ public class OCMasker extends DynamicCommand implements Initializable {
         oncoChrome.setControlMask(withControlMask);
 
         if ( image.getNChannels() > oncoChrome.getNSourceChannels() ) {
-            if ( nonOCThreshold == "NONE" )
+            if ( nonOCThreshold.equals("NONE") )
                 nonOCThreshold = null;
             oncoChrome.setExtraChannel('F', nonOCThreshold);
         }
