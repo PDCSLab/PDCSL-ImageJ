@@ -7,27 +7,20 @@ Miscellaneous Plugins
   cells on images of larval brains.
   
 [images/foci-counter-settings.png] Parameters for the <Foci Counter>
-plugin
+plugin.
 
   This plugin expects the following parameters:
   
   * <<<Thresholding method>>>: How to threshold the image to isolate the
-  foci. Possible values are:
+  foci. Any automatic thresholding algorithm available in ImageJ can be
+  selected. In addition, there are two special values:
   
-    * <<<none>>>: No thresholding will be performed. Use this if the
+    * <<<NONE>>>: No thresholding will be performed. Use this if the
     image has already been thresholded by another mean prior to running
     the plugin.
     
-    * <<<preset>>>: Use a fixed threshold value that has already been
+    * <<<PRESET>>>: Use a fixed threshold value that has already been
     set using ImageJ’s thresholding tool.
-    
-    * Any of the automatic thresholding algorithms available in ImageJ:
-    <<<Huang>>>, <<<IJ_Isodata>>>, <<<Intermodes>>>, <<<Isodata>>>,
-    <<<MaxEntropy>>>, <<<Mean>>>, <<<Min_Error>>>, <<<Minimum>>>,
-    <<<Moments>>>, <<<Otsu>>>, <<<Percentile>>>, <<<RenyiEntropy>>>,
-    <<<Triangle>>>, <<<Yen>>>, <<<Bernsen>>>, <<<Contrast>>>,
-    <<<Mean_Local>>>, <<<Median>>>, <<<Midgrey>>>, <<<Niblack>>>,
-    <<<Otsu_local>>>, <<<Phansalkar>>>, and <<<Sauvola>>>.
     
   * <<<Channels>>>: The channel(s) on which to detect foci. Can be
   <<<selected>>> to process the currently selected channel, <<<all>>>

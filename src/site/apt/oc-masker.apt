@@ -10,12 +10,13 @@ The OC Masker Plugin
 
   This plugin expects the following parameters:
   
-  * <<<OncoChrome setup>>>: One of the pre-defined OncoChrome
+  * <<<OncoChrome configuration>>>: One of the pre-defined OncoChrome
   configurations (more on that below).
   
-  * <<<Custom OncoChrome setup>>>: If you want to use an OncoChrome
-  configuration that is not already pre-defined, it can be specified
-  here, using the syntax described below.
+  * <<<Custom OncoChrome configuration>>>: If you want to use an
+  OncoChrome configuration that is not already pre-defined, choose
+  <<<Custom...>>> in the previous drop-down menu and describe the
+  configuration you want to use here, using the syntax described below.
   
   * <<<Order of channels>>>: A series of letters indicating the orders
   of the different channels in the source image. Which letters can be
@@ -41,10 +42,8 @@ The OC Masker Plugin
   * <<<Thresholding algorithm for non-OC channel ('F')>>>: If the
   image contains a far-red channel, this parameter indicates which
   thresholding algorithm to apply to it. It must be one of the
-  available thresholding algorithm available in ImageJ/FIJI, as listed
-  in the description of the {{{./misc-plugins.html}Foci Counter
-  plugin}}. Leave that parameter empty if no thresholding of the
-  far-red channel is desired.
+  available thresholding algorithm available in ImageJ/FIJI, or
+  <<<NONE>>> if no thresholding of the far-red channel is desired.
   
   The rationale for this parameter is that, depending on the kind of
   signal to analyse on the far-red channel, it may be better to
@@ -56,7 +55,7 @@ The OC Masker Plugin
   part of the tissue – that ism the regions that don’t express any of
   the OncoChrome fluorophore. This assumes that the first channel in
   the OncoChrome configuration masks the entire tissue (this is the
-  case in the <<<Brain-v1>>> and <<<FitFLP-v1>>> predeefined
+  case in the <<<Brain-v1>>> and <<<FitFLP-v1>>> predefined
   configurations).
   
   * <<<Apply the masks>>>: If this option is enabled and the image

@@ -28,12 +28,12 @@ Counter> script.
 
   Script-level parameters are:
   
-  * <<<OncoChrome setup>>>: one of the pre-defined OncoChrome
-  configurations.
+  * <<<OncoChrome configuration>>>: one of the pre-defined OncoChrome
+  configurations, or <<<Custom...>>> to use an explicit configuration.
   
-  * <<<Custom OncoChrome setup>>>: a formal description of a custom
-  OncoChrome configuration, to be used instead of one of the pre-defined
-  configurations.
+  * <<<Custom OncoChrome configuration>>>: a formal description of a
+  custom OncoChrome configuration, used if <<<Custom...>>> is selected
+  in the previous drop-down menu.
   
   * <<<Create control mask>>>: If enabled, a mask corresponding to the
   “control” region of the sample (not expressing any fluorophore) will
@@ -55,9 +55,8 @@ Counter> script.
   * <<<Threshold for non-OC channel>>>: If analysis of the far-red
   channel has been enabled, this option indicates which thresholding
   algorithm to apply to the far-red channel prior to nuclei/foci
-  detection. The value should be the name of one of the automatic
-  thresholding algorithms available in ImageJ, or the special value
-  <<<nuclei>>> to use the same algorithm as the
+  detection. The special value <<<NUCLEI>>> indicates to use the same
+  algorithm as the one used in the
   {{{./misc-plugins.html#Nuclei_Counter}Nuclei Counter}} plugin.
   
   * <<<Subtract background radius>>>: If set to a non-zero value,
@@ -83,11 +82,11 @@ Counter> script.
   limits (minimum size 0, maximum size 500).
   
   * To detect and count ɣH2A.X foci: thresholding algorithm
-  <<<MaxEntropy>>>, other parameters left as by default (background
+  <<<Max_Entropy>>>, other parameters left as by default (background
   subtraction radius 50 pixels, Gaussian blur radius 2 pixels,
   minimum size 3, maximum size 50).
   
   * To detect and count H3S10P-positive nuclei: thresholding algorithm
-  <<<RenyiEntropy>>>, other parameters left as by default (background
+  <<<Renyi_Entropy>>>, other parameters left as by default (background
   subtraction radius 50 pixels, Gaussian blur radius 2 pixels,
   minimum size 3, maximum size 50).

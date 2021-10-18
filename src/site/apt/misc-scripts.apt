@@ -69,8 +69,9 @@ Counter> script.
   * <<<Thresholding method for foci>>>: The thresholding algorithm to
   apply to the ”Signal” channel to isolate the foci.
   
-  I typically use the <MaxEntropy> algorithm for quantifying ɣH2A.X foci
-  and the <RenyiEntropy> algorithm to quantify H3S10P-positive cells.
+  I typically use the <Max_Entropy> algorithm for quantifying ɣH2A.X
+  foci and the <Renyi_Entropy> algorithm to quantify H3S10P-positive
+  cells.
   
   * <<<Project Z-stack>>>: If enabled, Z-stacked images will be
   max-projectedl the default behaviour is to process every Z-slices

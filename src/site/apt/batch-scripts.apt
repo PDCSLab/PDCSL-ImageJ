@@ -1,9 +1,9 @@
 The PDCSL Batch Scripts
 
-  All “batch” scripts (in the <<<Plugins\>PDCSL\>Batch>>> menu) use as
-  input a CSV file containing the list of images to process. That CSV
-  file <must> contain a header line, and the first column <must>
-  contain the pathnames of the images to process.
+  All “batch” scripts (in the <Plugins\>PDCSL\>Batch> menu) use as input
+  a CSV file containing the list of images to process. That CSV file
+  <must> contain a header line, and the first column <must> contain the
+  pathnames of the images to process.
   
   Lines starting with a <<<#>>> are treated as comments and are ignored.
   
