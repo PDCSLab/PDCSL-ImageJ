@@ -29,7 +29,6 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
-import ij.IJ;
 import ij.ImagePlus;
 
 @Plugin(type = Command.class, menuPath = "Plugins>PDCSL>OC Masker")
@@ -62,8 +61,8 @@ public class OCMasker extends DynamicCommand implements Initializable {
     @Override
     public void run() {
         if ( oncoChromeConfig.equals("Custom...") ) {
-        	if ( customOncoChromeConfig == null || customOncoChromeConfig.isEmpty() )
-        		throw new RuntimeException("No custom configuration specified");
+            if ( customOncoChromeConfig == null || customOncoChromeConfig.isEmpty() )
+                throw new RuntimeException("No custom configuration specified");
             oncoChromeConfig = customOncoChromeConfig;
         }
 
@@ -87,8 +86,8 @@ public class OCMasker extends DynamicCommand implements Initializable {
 
     @Override
     public void initialize() {
-    	ArrayList<String> configs = new ArrayList<String>(OncoChrome.getPredefinedConfigurations());
-    	configs.add("Custom...");
+        ArrayList<String> configs = new ArrayList<String>(OncoChrome.getPredefinedConfigurations());
+        configs.add("Custom...");
 
         final MutableModuleItem<String> setupItem = getInfo().getMutableInput("oncoChromeConfig", String.class);
         setupItem.setChoices(configs);

@@ -296,20 +296,22 @@ public class OncoChrome {
      * <p>
      * The following identifiers are currently defined:
      * <ul>
-     * <li>"brain-v1": a configuration suitable for use with the OncoChrome v0/v1p on
-     * third instar larval brains.
-     * <li>"fitflp-v1": a configuration suitable for use with the FitFLP on wing discs.
+     * <li>"brain-v1": a configuration suitable for use with the OncoChrome v0/v1p
+     * on third instar larval brains.
+     * <li>"fitflp-v1": a configuration suitable for use with the FitFLP on wing
+     * discs.
      * </ul>
      * <p>
      * Future versions will add more identifiers.
      * <p>
-     * It is also possible to pass a formal description of an OncoChrome configuration.
-     * Such a formal specification is a semicolon-separated list of channel descriptions
-     * like the following: "A,Total,Threshold" where "A" is the one-letter channel
-     * code, "Total" is the name of the channel, and "Threshold" is the thresholding
-     * algorithm to apply to that channel. For example, the formal description of
-     * the "brain-v1" configuration is "G,Total,Huang; C,mTurquoise,Moments;
-     * G,GFP,Moments; Y,Citrine,Moments; R,mCherry,MaxEntropy".
+     * It is also possible to pass a formal description of an OncoChrome
+     * configuration. Such a formal specification is a semicolon-separated list of
+     * channel descriptions like the following: "A,Total,Threshold" where "A" is the
+     * one-letter channel code, "Total" is the name of the channel, and "Threshold"
+     * is the thresholding algorithm to apply to that channel. For example, the
+     * formal description of the "brain-v1" configuration is "G,Total,Huang;
+     * C,mTurquoise,Moments; G,GFP,Moments; Y,Citrine,Moments;
+     * R,mCherry,MaxEntropy".
      * 
      * @param spec an OncoChrome configuration identifier
      * @return an OncoChrome object
