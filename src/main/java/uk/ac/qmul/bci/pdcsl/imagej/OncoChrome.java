@@ -290,28 +290,28 @@ public class OncoChrome {
     }
 
     /**
-     * Gets an OncoChrome instance for a given OncoChrome setup. This is the
+     * Gets an OncoChrome instance for a given OncoChrome configuration. This is the
      * intended public interface to get an OncoChrome object. It accepts a string
-     * identifier for pre-defined OncoChrome setups.
+     * identifier for pre-defined OncoChrome configurations.
      * <p>
      * The following identifiers are currently defined:
      * <ul>
-     * <li>"brain-v1": a setup suitable for use with the OncoChrome v0/v1p on third
-     * instar larval brains.
-     * <li>"fitflp-v1": a setup suitable for use with the FitFLP on wing discs.
+     * <li>"brain-v1": a configuration suitable for use with the OncoChrome v0/v1p on
+     * third instar larval brains.
+     * <li>"fitflp-v1": a configuration suitable for use with the FitFLP on wing discs.
      * </ul>
      * <p>
      * Future versions will add more identifiers.
      * <p>
-     * It is also possible to pass a formal description of an OncoChrome setup. Such
-     * a formal specification is a semicolon-separated list of channel descriptions
+     * It is also possible to pass a formal description of an OncoChrome configuration.
+     * Such a formal specification is a semicolon-separated list of channel descriptions
      * like the following: "A,Total,Threshold" where "A" is the one-letter channel
      * code, "Total" is the name of the channel, and "Threshold" is the thresholding
      * algorithm to apply to that channel. For example, the formal description of
-     * the "brain-v1" setup is "G,Total,Huang; C,mTurquoise,Moments; G,GFP,Moments;
-     * Y,Citrine,Moments; R,mCherry,MaxEntropy".
+     * the "brain-v1" configuration is "G,Total,Huang; C,mTurquoise,Moments;
+     * G,GFP,Moments; Y,Citrine,Moments; R,mCherry,MaxEntropy".
      * 
-     * @param spec an OncoChrome setup identifier
+     * @param spec an OncoChrome configuration identifier
      * @return an OncoChrome object
      */
     public static OncoChrome getOncoChrome(String spec) {
@@ -342,11 +342,11 @@ public class OncoChrome {
     }
 
     /**
-     * Gets the list of pre-defined OncoChrome setups.
+     * Gets the list of pre-defined OncoChrome configurations.
      * 
-     * @return a list of names for available OncoChrome setups.
+     * @return a list of names for available OncoChrome configurations.
      */
-    public static List<String> getPredefinedSetups() {
+    public static List<String> getPredefinedConfigurations() {
         return Arrays.asList("Brain-v1", "FitFlp-v1");
     }
 

@@ -29,6 +29,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.ui.UIService;
 
+import ij.IJ;
 import ij.ImagePlus;
 
 @Plugin(type = Command.class, menuPath = "Plugins>PDCSL>OC Masker")
@@ -37,11 +38,11 @@ public class OCMasker extends DynamicCommand implements Initializable {
     @Parameter
     private ImagePlus image;
 
-    @Parameter(label = "OncoChrome setup")
-    private String oncoChromeSetup;
+    @Parameter(label = "OncoChrome configuration")
+    private String oncoChromeConfig;
 
-    @Parameter(label = "Custom OncoChrome setup", required = false)
-    private String customOncoChromeSetup;
+    @Parameter(label = "Custom OncoChrome configuration", required = false)
+    private String customOncoChromeConfig;
 
     @Parameter(label = "Order of channels")
     private String channelOrder;
@@ -60,13 +61,13 @@ public class OCMasker extends DynamicCommand implements Initializable {
 
     @Override
     public void run() {
-        if ( oncoChromeSetup == "Custom..." ) {
-        	if ( customOncoChromeSetup == null || customOncoChromeSetup.isEmpty() )
-        		throw new RuntimeException("No custom setup specified");
-            oncoChromeSetup = customOncoChromeSetup;
+        if ( oncoChromeConfig == "Custom..." ) {
+        	if ( customOncoChromeConfig == null || customOncoChromeConfig.isEmpty() )
+        		throw new RuntimeException("No custom configuration specified");
+            oncoChromeConfig = customOncoChromeConfig;
         }
 
-        OncoChrome oncoChrome = OncoChrome.getOncoChrome(oncoChromeSetup);
+        OncoChrome oncoChrome = OncoChrome.getOncoChrome(oncoChromeConfig);
         oncoChrome.setControlMask(withControlMask);
 
         if ( image.getNChannels() > oncoChrome.getNSourceChannels() ) {
@@ -86,11 +87,11 @@ public class OCMasker extends DynamicCommand implements Initializable {
 
     @Override
     public void initialize() {
-    	ArrayList<String> setups = new ArrayList<String>(OncoChrome.getPredefinedSetups());
-    	setups.add("Custom...");
+    	ArrayList<String> configs = new ArrayList<String>(OncoChrome.getPredefinedConfigurations());
+    	configs.add("Custom...");
 
-        final MutableModuleItem<String> setupItem = getInfo().getMutableInput("oncoChromeSetup", String.class);
-        setupItem.setChoices(setups);
+        final MutableModuleItem<String> setupItem = getInfo().getMutableInput("oncoChromeConfig", String.class);
+        setupItem.setChoices(configs);
 
         ArrayList<String> algos = new ArrayList<String>();
         algos.add("NONE");

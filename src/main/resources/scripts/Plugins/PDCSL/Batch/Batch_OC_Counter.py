@@ -1,6 +1,6 @@
 # @ File (label='Choose a CSV file', style='file') input_file
-# @ String (label='OncoChrome setup', choices={"Brain-v1", "FitFLP-v1", "Custom..."}, style='listBox') oncochrome_setup
-# @ String (label='Custom OncoChrome setup', required=false) custom_oncochrome_setup
+# @ String (label='OncoChrome configuration', choices={"Brain-v1", "FitFLP-v1", "Custom..."}, style='listBox') oncochrome_config
+# @ String (label='Custom OncoChrome configuration', required=false) custom_oncochrome_config
 # @ Boolean (label='Create control mask', value=false, persist=false) with_control
 # @ Boolean (label='Save mask images', value=false, persist=false) save_masks
 # @ String (visibility=MESSAGE, value="Extra channel settings") msg1
@@ -93,14 +93,14 @@ def run_script():
     savedir = os.path.dirname(pathname) if save_masks else None
     results = ResultsTable()
 
-    if oncochrome_setup == 'Custom...':
-        if custom_oncochrome_setup is None or len(custom_oncochrome_setup) == 0:
-            raise RuntimeException("No custom setup specified")
-        setup = custom_oncochrome_setup
+    if oncochrome_config == 'Custom...':
+        if custom_oncochrome_config is None or len(custom_oncochrome_config) == 0:
+            raise RuntimeException("No custom configuration specified")
+        config = custom_oncochrome_config
     else:
-        setup = oncochrome_setup
+        config = oncochrome_config
 
-    oncochrome = OncoChrome.getOncoChrome(setup);
+    oncochrome = OncoChrome.getOncoChrome(config);
     oncochrome.setControlMask(with_control)
     if process_extra:
         if extra_threshold == 'NUCLEI':
