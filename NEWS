@@ -1,0 +1,14 @@
+Changes in pdcsl-imagej-0.1.11
+------------------------------
+
+    * Use drop-down menus wherever possible.
+    * Add predefined configuration for the FitFLP.
+    
+
+Changes in pdcsl-imagej-0.1.10
+------------------------------
+
+    * Use more consistent column names.
+    * Allow the use of custom OncoChrome configurations.
+    * Add more parameters to the Batch_OC_Counter script.
+    * Support channel order specifications in Batch_Volume_Counter.
