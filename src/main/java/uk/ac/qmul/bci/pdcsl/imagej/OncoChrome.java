@@ -277,9 +277,10 @@ public class OncoChrome {
      *                       copied as is)
      * @return the resulting masked image
      */
+    @Deprecated
     public static ImagePlus createMask(ImagePlus source, String channelOrder, boolean withControl,
             String nonOCThreshold) {
-        OncoChrome onc = OncoChrome.getOncoChrome("brainv1");
+        OncoChrome onc = OncoChrome.getOncoChrome("brain-v1");
         onc.setControlMask(withControl);
         if ( source.getNChannels() == 5 ) {
             onc.setExtraChannel('F', nonOCThreshold);
