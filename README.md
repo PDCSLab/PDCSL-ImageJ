@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/277102055.svg)](https://zenodo.org/badge/latestdoi/277102055)
+
 PDCSL-ImageJ
 ============
 
