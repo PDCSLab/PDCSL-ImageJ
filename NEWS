@@ -1,3 +1,9 @@
+Changes in pdcsl-imagej-0.1.13
+------------------------------
+
+    * Fix argument mixup in the Batch_Volume_Counter script.
+
+
 Changes in pdcsl-imagej-0.1.12
 ------------------------------
 
